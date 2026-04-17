@@ -95,7 +95,17 @@
       "Bash(pnpm --filter @learning/api exec tsc --noEmit)",
       "Bash(pnpm --filter @learning/web exec tsc --noEmit)",
       "Bash(ls /Users/guypowell/Documents/Projects/learning/packages/web/*.js /Users/guypowell/Documents/Projects/learning/packages/web/*.ts)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(pnpm --filter api test -- --testPathPattern=\"adminGuard|AdminService|AdminController\" --no-coverage)",
+      "Bash(pnpm --filter api test -- --testPathPattern=\"adminGuard\" --no-coverage)",
+      "Bash(pnpm --filter api build)",
+      "Bash(pnpm --filter web add @tiptap/react @tiptap/pm @tiptap/starter-kit)",
+      "Bash(pnpm --filter web build)",
+      "Bash(cp \"/Users/guypowell/Documents/Projects/learning/packages/web/app/\\(admin\\)/lessons/[id]/page.tsx\" \"/Users/guypowell/Documents/Projects/learning/packages/web/app/\\(admin\\)/admin/lessons/[id]/page.tsx\")",
+      "Bash(cp \"/Users/guypowell/Documents/Projects/learning/packages/web/app/\\(admin\\)/lessons/[id]/__tests__/page.test.tsx\" \"/Users/guypowell/Documents/Projects/learning/packages/web/app/\\(admin\\)/admin/lessons/[id]/__tests__/page.test.tsx\")",
+      "Bash(pnpm --filter @learning/api test --passWithNoTests)",
+      "Bash(pnpm --filter @learning/web test --passWithNoTests)",
+      "Bash(pnpm --filter @learning/api test -- --testPathPattern=\"AdminService|AdminController\")"
     ]
   }
 }
