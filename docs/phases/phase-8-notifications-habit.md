@@ -1,8 +1,31 @@
 # Phase 8: Notifications & Habit Engine
 
-**Status**: ⚪ NOT STARTED
+**Status**: ✅ COMPLETE
+**arch-review**: required - approved
+**ADR**: [ADR-003 — Push Notification Architecture](../adr/ADR-003-push-notification-architecture.md)
 
 **Goal**: Deliver daily reminders at user-preferred times across web and mobile. Reinforce the daily learning habit with streaks, milestones, and motivational messaging.
+
+---
+
+## Architectural Constraints (from ADR-003)
+
+**Provider decision**:
+- Mobile: Expo Push Service via `expo-server-sdk` (no Firebase account needed)
+- Web: Web Push API (W3C standard) via `web-push` npm + VAPID keys
+
+**Schema**: New `PushToken` model — do NOT add pushToken to `NotificationPreference`
+
+**Key constraints for dev agent** (full detail in ADR-003):
+1. `PushToken(userId, platform, deviceId)` unique — supports multi-device
+2. `PushNotificationService.send()` must never throw — swallow all send errors
+3. Expo batch limit: ≤100 tokens per send call
+4. Delete stale tokens on `DeviceNotRegistered` / HTTP 410 responses
+5. Cron idempotency: check `Notification` table before sending (20-hour window)
+6. VAPID keys in env (`VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT`) — never committed
+7. `node-cron` for MVP — Bull deferred to Phase 11
+8. Cron registered in `index.ts` after server starts
+9. Expo token requires `projectId` from `app.json` (SDK 50+ requirement)
 
 ---
 
@@ -135,6 +158,48 @@
 - TailwindCSS dark mode (`dark:` variants)
 - Respect system preference (`prefers-color-scheme`)
 - Toggle in settings
+
+---
+
+## Implementation Summary (2026-04-17)
+
+### Chunk 8.1 — Push Notifications (Backend + Web)
+- **Schema**: New `PushToken` model (`userId, token, platform, deviceId` — unique on `(userId, platform, deviceId)`, cascade delete, indexed)
+- **PushNotificationService** (`packages/api/src/services/`): unified send for Expo + Web Push API (VAPID). Never throws. Removes stale tokens on `DeviceNotRegistered` / HTTP 410.
+- **API**: `POST /api/notifications/push-token` (protected) — upserts device token
+- **Daily reminder cron** (`packages/api/src/jobs/dailyReminderJob.ts`): `node-cron` hourly, matches `UserProfile.preferredTime` to UTC hour, skips users who already completed today, 20-hour idempotency guard via `Notification` table
+- **Service worker** (`packages/web/public/sw.js`): handles `push` + `notificationclick` events, navigates to lesson on tap
+- **`useWebPush` hook** (`packages/web/lib/`): registers SW, requests permission, POSTs VAPID subscription to backend
+- **Settings page**: browser push subscribe button + status indicator
+
+### Chunk 8.2 — Push Notifications (Mobile)
+- **`useNotifications` hook** (`learning-app/src/hooks/`): requests permissions, gets `expo-notifications` token, POSTs to backend. No-ops silently in simulator or on permission denial.
+- **`_layout.tsx`**: `addNotificationResponseReceivedListener` for background tap → navigates to `/(tabs)` or `/(tabs)/progress`
+- **Tabs layout**: calls `useNotifications()` on mount (authenticated scope only)
+- **Global mocks**: `__mocks__/expo-notifications.ts` + `expo-device.ts` for test isolation
+
+### Chunk 8.3 — Habit Reinforcement (Backend + Frontend)
+- **`StreakService`** (`packages/api/src/services/`): `getMilestone(streak)`, `getStreakMessage(streak)`, `isStreakAtRisk(userId)` (timezone-aware, past-6PM check)
+- **Milestone notifications**: wired into `LessonService.submitQuiz()` — fire-and-forget, idempotent per `streak-milestone-{n}` type in `Notification` table
+- **Evening at-risk cron** (`packages/api/src/jobs/streakAtRiskJob.ts`): hourly, uses `isStreakAtRisk`, 20-hour idempotency guard
+- **`QuizResult` shared type** extended: `streak: number`, `milestone: string | null`
+- **Web dashboard**: "Keep the streak alive" banner (streak > 3), animated streak counter (`animate-count-up`)
+- **Web quiz page**: milestone celebration banner + confetti (`Confetti` component, CSS keyframes), streak display in results
+- **Mobile `QuizModal`**: animated score (`Animated.spring`), milestone card (orange gradient), streak row, left-border feedback cards (green/red)
+
+### Chunk 8.4 — UX Polish (Web)
+- **Skeleton loaders**: `DashboardSkeleton`, `QuizSkeleton`, `ProgressSkeleton` (replaces spinners on all load states)
+- **Toast system** (`components/Toast.tsx`): `ToastProvider` + `useToast()` hook — success/error/info toasts with slide-in animation, wired globally in `app/layout.tsx`
+- **Offline banner**: `OfflineBanner` component detects `online`/`offline` events, shown globally
+- **Tailwind animations**: `animate-pulse-green` (correct answer), `animate-shake` (incorrect answer), `animate-count-up` (streak), `animate-slide-in` (toasts), `animate-progress-fill` (progress bars)
+- **Dark mode**: `darkMode: 'class'` in Tailwind, `useDarkMode` hook (localStorage + `prefers-color-scheme`), toggle in Settings, `dark:` variants across dashboard/quiz/progress/settings/layout
+- **ARIA**: `role="progressbar"`, `role="alert"`, `aria-live`, `aria-label`, `aria-checked` (toggle switches), `aria-busy` (skeleton states), `accessibilityLabel` on all mobile interactives, `fieldset`/`legend` on quiz options, `<header>`/`<main>`/`<nav>` semantic elements
+- **Settings page**: toggle switch component (replaces checkboxes), styled select with ARIA, loading skeleton
+
+### Tests
+- **API**: 122 tests passing (18 suites). New: `PushNotificationService.test.ts` (4), `StreakService.test.ts` (8), `dailyReminderJob.test.ts` (5)
+- **Web**: 12 tests passing
+- **Mobile**: 149 tests passing (25 suites). New: `useNotifications.test.ts` (5)
 
 ---
 

@@ -152,6 +152,34 @@ last_updated: 2026-04-12
 
 **Why**: Prepared for Stripe integration (Phase 2+ stretch goal). Can mock subscriptions for frontend development.
 
+### 9. Personalization Layer (ADR-002 — accepted, Phase 7)
+**Algorithm services** (`packages/api/src/ai/`): `RecommendationEngine` (UCB1 bandit, lesson selection), `SkillTracker` (Elo rating, difficulty routing), `LearningStyleClassifier` (rule-based, style detection). These are computation units — they may read from Prisma but route all writes through the service layer.
+
+**New DB models**: `UserSkillRating` (userId+skillId unique, Elo rating, cascade on user delete); `GeneratedLesson` (Phase 6 6.6 — adds nullable `coachingMessage` field in Phase 7). `UserProgress` gains `completionTime`, `revisitCount`, `rating` fields — `quizScore` already exists.
+
+**Coaching flow**: `CoachingService.generateFeedback()` is called post-quiz for Pro/Premium; returns `null` immediately for free/starter; wraps AI call in try/catch so quiz delivery is never blocked. Cached in `GeneratedLesson.coachingMessage`.
+
+**Quiz response**: `POST /api/lessons/:id/quiz` response gains a `coaching` field (`string | null`). Never omitted — null for free/starter or AI failure. Shape change is backwards-compatible.
+
+### 8. Python AI Microservice (ADR-001 — accepted)
+**Decision**: All LLM interactions (lesson generation, quiz generation, AI coaching) handled by a dedicated FastAPI Python service in repo `/Users/guypowell/Documents/Projects/learning-ai`. Node backend calls it over HTTP and validates every response with Zod. Node is system of record; Python is best-effort.
+
+**Stack**: FastAPI + uvicorn (dev), uvicorn + gunicorn (prod, Render). Local models via Ollama (`llama3:8b` default, `mistral:7b` available). Production via Google Vertex AI. Provider switched via `AI_PROVIDER` env var.
+
+**Trust model**: Python = best effort. Node + Zod = source of truth. All responses validated with `schema.safeParse()` before storage or serving. Failures trigger fallback chain: DB cache → static content → 503.
+
+**Reliability**: 30s timeout (AbortController), 3 retries with exponential backoff (~150/300/600ms), circuit breaker via `opossum` (opens after 5 failures in 10s, half-open after 30s).
+
+**Auth**: `X-Internal-API-Key` header shared between services via env var.
+
+**Response mode**: Batch only (not streaming) — required for Zod validation invariant.
+
+**Zod contract**: `packages/shared/src/types/ai.ts` — exported from `@learning/shared`. Single source of truth for Node↔Python data contract.
+
+**Context flow**: Node assembles context (tier, skill_level, user_context, learning_style) → passes to Python. Python selects model and prompt variant. Node never has prompt templates or model clients.
+
+**Full ADR**: `docs/adr/ADR-001-python-ai-service.md`
+
 ---
 
 ## Module Interactions
@@ -270,6 +298,36 @@ last_updated: 2026-04-12
 ---
 
 ## Change Log
+
+**2026-04-17** — ADR-003: Push Notification Architecture (Phase 8)
+- Mobile: Expo Push Service (`expo-server-sdk`) — no Firebase account required
+- Web: Web Push API (`web-push` npm) + VAPID keys — no external account required
+- New `PushToken` model: `(userId, platform, deviceId)` unique, cascade on user delete — supports multi-device
+- Unified `PushNotificationService` abstraction routes by platform — never throws (notification failure is non-blocking)
+- `node-cron` for MVP (daily + evening jobs in `packages/api/src/jobs/`) — Bull deferred to Phase 11
+- New `StreakService`: pure-function milestone/message helpers + `isStreakAtRisk()` (reads UserProgress + timezone)
+- Cron idempotency: 20-hour guard via `Notification` table before any send
+- VAPID keys: `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` in env — never committed
+- `POST /api/notifications/push-token` added to notifications router (protected)
+- Full ADR: `docs/adr/ADR-003-push-notification-architecture.md`
+
+**2026-04-17** — ADR-002: Node Personalization Architecture (Phase 7)
+- `quizScore` already exists on `UserProgress` — only add `completionTime`, `revisitCount`, `rating`
+- Algorithm services (`RecommendationEngine`, `SkillTracker`, `LearningStyleClassifier`) in `packages/api/src/ai/` (computation units, not data-access services)
+- Coaching tier enforcement in `CoachingService.generateFeedback()` not route middleware — quiz route open to all tiers
+- Coaching cache in `GeneratedLesson.coachingMessage` (nullable String) — not Redis
+- `LearningStyleClassifier` returns style string; caller invokes `UserService.updateUserProfile()` — no direct DB writes
+- `Skill` model needs `userSkillRatings UserSkillRating[]` backrelation for migration
+- Phase 6 Chunk 6.6 prerequisite: `GeneratedLesson` model must exist before Phase 7 coaching cache
+
+**2026-04-14** — ADR-001: Python AI Microservice
+- Accepted architecture for all AI interactions: FastAPI Python service in `learning-ai` repo
+- Ollama (llama3:8b + mistral:7b) local; Vertex AI prod; switched via AI_PROVIDER env var
+- Node trust model: Zod validates all Python responses; fallback chain on failure
+- Reliability: 30s timeout, 3 retries exp backoff, opossum circuit breaker
+- Phase 6 (AI generation) and Phase 7 (personalization) updated to reflect this architecture
+- Phase 5 (Stripe billing) unchanged
+- ADR written at `docs/adr/ADR-001-python-ai-service.md`
 
 **2026-04-12** — Initialization Complete
 - Read fs.md (full stack context).

@@ -31,12 +31,15 @@ last_updated: 2026-04-11
 
 | Phase | Scope | Status |
 |-------|-------|--------|
-| **1** | Foundation & Infrastructure (monorepo, Docker, DB schema) | ✅ **COMPLETE** |
-| **2** | Core Backend API (auth, lesson delivery, subscriptions) | ✅ **COMPLETE** |
-| **3** | Web Frontend (auth, dashboard, lessons, progress) | ⚪ **NEXT** |
-| **4** | Mobile App (React Native/Expo parity) | ⚪ Future |
-| **5** | Notifications & UX Polish | ⚪ Future |
-| **6** | Testing & Launch (staging, production deployment) | ⚪ Future |
+| **1** | Foundation & Infrastructure (monorepo, Docker, DB schema) | ✅ COMPLETE |
+| **2** | Core Backend API (auth, lesson delivery, subscriptions) | ✅ COMPLETE |
+| **3** | Web Frontend (auth, dashboard, lessons, progress) | ✅ COMPLETE |
+| **4** | Mobile App (React Native/Expo parity) | ✅ COMPLETE |
+| **5** | Stripe Billing | ⚪ Not started |
+| **6** | AI Lesson Generation | ✅ COMPLETE |
+| **7** | AI Personalization & Adaptive Learning | ✅ COMPLETE |
+| **8** | Notifications & Habit Engine | ✅ COMPLETE |
+| **9** | Admin CMS | ⚪ NEXT |
 
 **MVP Target**: Phases 1–2 complete. Phase 3 (web frontend) is the immediate next step. Full MVP = 12 weeks (Phases 1–3 + core Phase 6).
 
@@ -375,6 +378,34 @@ pnpm db:reset     # Reset database
 - Verified both API and Web servers running correctly
 - Tested full lesson completion flow manually with curl
 - Updated PROGRESS.md and phase documentation with completion summary
+
+**2026-04-17** — PHASE 8 COMPLETE (Notifications & Habit Engine)
+- Schema: `PushToken` model (userId, token, platform "expo"|"web", deviceId, unique on all 3, cascade delete)
+- `PushNotificationService`: unified Expo + web-push send, never throws, removes stale tokens
+- `StreakService`: `getMilestone()`, `getStreakMessage()`, `isStreakAtRisk()` (timezone-aware)
+- Cron jobs: `dailyReminderJob.ts` (hourly, matches preferredTime to UTC hour, 20h idempotency), `streakAtRiskJob.ts` (evening, at-risk check)
+- `POST /api/notifications/push-token` added to notifications router
+- `QuizResult` shared type: `streak: number`, `milestone: string | null`
+- Milestone notifications wired into `LessonService.submitQuiz()` (fire-and-forget, idempotent)
+- Web: service worker (`public/sw.js`), `useWebPush` hook, `useDarkMode` hook, `useToast` hook
+- Web components: `Toast`/`ToastProvider`, `OfflineBanner`, `Confetti`, `Skeleton` variants
+- Web pages fully dark-mode aware (`dark:` Tailwind classes), ARIA throughout
+- Tailwind: `darkMode: 'class'`, custom animations (pulse-green, shake, count-up, slide-in, progress-fill)
+- Mobile: `useNotifications` hook (expo-notifications, permissions, token registration), global mocks for expo-notifications + expo-device
+- Mobile QuizModal: `Animated.spring` score, milestone card, streak row, coloured feedback borders
+- Tests: 122 API + 12 web + 149 mobile, all passing
+
+**2026-04-17** — PHASE 6 CHUNK 6.6 + PHASE 7 COMPLETE
+- Prisma schema: `GeneratedLesson` (AI lesson cache, skillId key, `coachingMessage`), `UserSkillRating` (Elo), `UserProgress` engagement fields (`completionTime`, `revisitCount`, `rating`)
+- `src/ai/`: `SkillTracker` (Elo), `RecommendationEngine` (UCB1), `LearningStyleClassifier` (rule-based)
+- `src/services/`: `EngagementService`, `CoachingService` (never throws, null fallback, cache in `GeneratedLesson`)
+- `LessonService.submitQuiz()` wires all personalisation; `getTodayLesson()` delegates to `RecommendationEngine`
+- `middleware/plan.ts`: `detectPlan` non-blocking middleware added
+- `QuizResult.coaching: string | null` in shared types
+- Web quiz.tsx: coaching card below explanation (null-safe)
+- Mobile QuizModal.tsx: coaching card in results view (null-safe)
+- jest.config.cjs renamed in web package (ESM/CJS fix)
+- 100 Node API + 12 Web + 144 Mobile tests all passing
 
 **2026-04-12** — CHUNK 3.1 COMPLETE
 - Set up Jest + React Testing Library testing infrastructure

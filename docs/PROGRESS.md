@@ -16,9 +16,9 @@ Last updated: 2026-04-12.
 | **3** | Web Frontend | ✅ COMPLETE | 3.1–3.3 | Archive (reference only) |
 | **4** | Mobile App | ✅ COMPLETE | 4.1–4.2 | Archive (reference only) |
 | **5** | Stripe Billing | ⚪ Not started | 5.1–5.4 | After Phase 4 |
-| **6** | AI Lesson Generation | ⚪ Not started | 6.1–6.5 | After Phase 5 |
-| **7** | AI Personalization & Adaptive Learning | ⚪ Not started | 7.1–7.4 | After Phase 6 |
-| **8** | Notifications & Habit Engine | ⚪ Not started | 8.1–8.4 | After Phase 7 |
+| **6** | AI Lesson Generation | ✅ COMPLETE | 6.1–6.6 | Archive (reference only) |
+| **7** | AI Personalization & Adaptive Learning | ✅ COMPLETE | 7.1–7.4 | Archive (reference only) |
+| **8** | Notifications & Habit Engine | ✅ COMPLETE | 8.1–8.4 | Archive (reference only) |
 | **9** | Admin CMS | ⚪ Not started | 9.1–9.4 | After Phase 8 |
 | **10** | Enterprise & Team Features | ⚪ Not started | 10.1–10.4 | After Phase 9 |
 | **11** | Security, Analytics & Observability | ⚪ Not started | 11.1–11.4 | After Phase 10 |
@@ -26,21 +26,11 @@ Last updated: 2026-04-12.
 
 ---
 
-## Current Phase: Phase 4 — Mobile App
+## Current Phase: Phase 9 — Admin CMS
 
-**What's being built**: React Native/Expo app with full feature parity to the web app.
+**What's being built**: Admin authentication, lesson authoring UI, and skill path management.
 
-**Chunking**:
-- **4.1**: Expo project setup, auth flow, navigation → [phase-4-mobile.md](./phases/phase-4-mobile.md#chunk-41-mobile-project-setup--auth)
-- **4.2**: Lessons tab, quiz modal, progress tab, profile tab → [phase-4-mobile.md](./phases/phase-4-mobile.md#chunk-42-mobile-features)
-
-**Progress within Phase 4**:
-- [x] 4.1.1 — Expo project initialisation
-- [x] 4.1.2 — Auth flow (login, signup, Expo Secure Store)
-- [x] 4.1.3 — Navigation setup (tabs + root auth check)
-- [x] 4.2.1 — Lessons tab (today's lesson card)
-- [x] 4.2.2 — Quiz modal
-- [x] 4.2.3 — Progress tab + Profile tab
+**Previous phases**: Phases 1–8 complete. See [phase-8-notifications-habit.md](./phases/phase-8-notifications-habit.md) for the full Phase 8 implementation summary.
 
 ---
 
@@ -52,7 +42,7 @@ Last updated: 2026-04-12.
 - [Phase 3: Web Frontend](./phases/phase-3-web-frontend.md)
 
 ### Active Phase
-- [Phase 4: Mobile App](./phases/phase-4-mobile.md) ← **READ THIS NEXT**
+- [Phase 9: Admin CMS](./phases/phase-9-admin-cms.md) ← **READ THIS NEXT**
 
 ### Upcoming Phases
 - [Phase 5: Stripe Billing](./phases/phase-5-stripe-billing.md)
