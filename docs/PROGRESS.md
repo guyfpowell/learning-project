@@ -20,15 +20,42 @@ Last updated: 2026-04-17.
 | **7** | AI Personalization & Adaptive Learning | ✅ COMPLETE | 7.1–7.4 | Archive (reference only) |
 | **8** | Notifications & Habit Engine | ✅ COMPLETE | 8.1–8.4 | Archive (reference only) |
 | **9** | Admin CMS | ✅ COMPLETE | 9.1–9.4 | Archive (reference only) |
-| **10** | Enterprise & Team Features | ⚪ Not started | 10.1–10.4 | After Phase 9 |
+| **10** | Enterprise & Team Features | 🔄 In progress (10.2 deferred) | 10.1, 10.3, 10.4 ✅ / 10.2 ⚪ | 10.2 after Phase 5 |
 | **11** | Security, Analytics & Observability | ⚪ Not started | 11.1–11.4 | After Phase 10 |
 | **12** | Testing & Launch | ⚪ Not started | 12.1–12.5 | After Phase 11 |
 
 ---
 
-## Current Phase: Phase 10 — Enterprise & Team Features
+## Current Phase: Phase 10 — Enterprise & Team Features (10.2 deferred) → Phase 5 — Stripe Billing
 
-**Previous phases**: Phases 1–9 complete. See [phase-9-admin-cms.md](./phases/phase-9-admin-cms.md) for the full Phase 9 implementation summary.
+**Previous phases**: Phases 1–4, 6–9 complete. Phase 10 chunks 10.1, 10.3, 10.4 complete. Chunk 10.2 (Team Stripe billing) deferred until Phase 5 (individual Stripe) is done.
+
+---
+
+## Phase 10 — Enterprise & Team Features (PARTIALLY COMPLETE)
+
+### Chunks 10.1, 10.3, 10.4 — COMPLETE (2026-04-30)
+
+**Team Account Model (10.1)**
+- ✅ Schema: `TeamRole` enum, `Team`, `TeamMember`, `TeamSubscription` models; `User.teamMembers` + `User.ownedTeams` relations
+- ✅ `TeamService`: createTeam, getTeam, inviteMember (JWT token, email stubbed), acceptInvite, removeMember, getTeamSubscription
+- ✅ `TeamController` + `routes/teams.ts`: all 6 endpoints protected by `authMiddleware`
+- ✅ 29 new tests (17 service + 12 controller), all passing
+
+**Team Analytics Dashboard (10.3)**
+- ✅ `TeamAnalyticsService`: getTeamSummary, getMemberProgress, getSkillGapAnalysis, getTeamLeaderboard
+- ✅ 4 analytics routes added to `routes/teams.ts`
+- ✅ `packages/web/app/(dashboard)/team/page.tsx`: summary cards, member table, leaderboard, skill gap heatmap
+- ✅ Team nav link in dashboard sidebar
+- ✅ Team API client methods + types added to `api-client.ts`
+- ✅ 14 new tests (7 service + 7 web), all passing
+
+**Custom Skill Paths (10.4)**
+- ✅ `SkillPath.teamId String?` added (nullable, indexed)
+- ✅ `GET /api/lessons/skills` with team-aware visibility filtering
+- ✅ `AdminService.CreateSkillPathInput.teamId` optional field
+
+**Test totals**: API 184 (was 148), Web 54 (was 47)
 
 ---
 

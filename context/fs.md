@@ -1,6 +1,6 @@
 ---
 title: FS Agent Context — Learning App
-last_updated: 2026-04-11
+last_updated: 2026-04-30
 ---
 
 # Learning App — Full Stack Context
@@ -35,11 +35,12 @@ last_updated: 2026-04-11
 | **2** | Core Backend API (auth, lesson delivery, subscriptions) | ✅ COMPLETE |
 | **3** | Web Frontend (auth, dashboard, lessons, progress) | ✅ COMPLETE |
 | **4** | Mobile App (React Native/Expo parity) | ✅ COMPLETE |
-| **5** | Stripe Billing | ⚪ Not started |
+| **5** | Stripe Billing | ⚪ Not started — NEXT |
 | **6** | AI Lesson Generation | ✅ COMPLETE |
 | **7** | AI Personalization & Adaptive Learning | ✅ COMPLETE |
 | **8** | Notifications & Habit Engine | ✅ COMPLETE |
-| **9** | Admin CMS | ⚪ NEXT |
+| **9** | Admin CMS | ✅ COMPLETE |
+| **10** | Enterprise & Team Features | 🔄 In progress (10.1, 10.3, 10.4 ✅; 10.2 deferred to after Phase 5) |
 
 **MVP Target**: Phases 1–2 complete. Phase 3 (web frontend) is the immediate next step. Full MVP = 12 weeks (Phases 1–3 + core Phase 6).
 
@@ -341,6 +342,25 @@ pnpm db:reset     # Reset database
 **Next steps**: Chunk 3.2 (Dashboard, Lesson Screen, Quiz Screen) can proceed immediately — auth layer is solid and tested
 
 ---
+
+## Phase 10 Architecture Notes (added 2026-04-30)
+
+**New models**: `Team`, `TeamMember` (@@unique teamId+userId), `TeamSubscription` (stub for Phase 10.2), `TeamRole` enum (admin|member)
+
+**New services**:
+- `TeamService` (`packages/api/src/services/TeamService.ts`): team CRUD + invite flow. Invite uses JWT (`{ teamId, email }`, 7d expiry). Email send is stubbed (console.log). No Stripe wiring yet.
+- `TeamAnalyticsService` (`packages/api/src/services/TeamAnalyticsService.ts`): team summary stats, member progress, skill gap analysis, leaderboard (top 10)
+
+**New routes** (`packages/api/src/routes/teams.ts`): `/api/teams/*` — all protected by authMiddleware
+- `POST /api/teams`, `GET /api/teams/:id`, `POST /:id/invite`, `POST /:id/accept-invite`, `DELETE /:id/members/:userId`
+- Analytics: `GET /:id/analytics`, `GET /:id/members/progress`, `GET /:id/skill-gaps`, `GET /:id/leaderboard`
+- `GET /:id/subscription` — stubs, returns null until Phase 10.2
+
+**SkillPath.teamId**: nullable String added. `null` = global path (visible to all). Set = team-specific path (visible only to team members). `GET /api/lessons/skills` implements visibility filtering.
+
+**Web**: `packages/web/app/(dashboard)/team/page.tsx` — team dashboard (summary cards, member table, leaderboard, skill gap bars). Uses hardcoded `PLACEHOLDER_TEAM_ID = 'demo-team'` for now — needs proper team context when multi-team is implemented.
+
+**Important**: `GET /api/lessons/skills` endpoint was missing before Phase 10 — now added with team visibility. The api-client referenced `/lessons/skills` but the route didn't exist prior to this.
 
 ## Change Log
 

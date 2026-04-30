@@ -1,6 +1,6 @@
 # Phase 10: Enterprise & Team Features
 
-**Status**: ⚪ NOT STARTED
+**Status**: 🔄 IN PROGRESS (Chunks 10.1, 10.3, 10.4 complete; 10.2 deferred to after Phase 5)
 
 **Goal**: Enable B2B sales by supporting team accounts, team-level analytics, and org admin capabilities. Target: small PM teams (5–20 people) at $499/month.
 
@@ -158,6 +158,39 @@ model TeamSubscription {
 **Tests**: Unit test team analytics queries; test seat enforcement; test invite token validation; test path visibility filtering
 
 ---
+
+---
+
+## ✅ Implementation Summary (2026-04-30)
+
+**Chunks completed**: 10.1, 10.3, 10.4 (Chunk 10.2 deferred — requires Phase 5 Stripe)
+
+### Chunk 10.1 — Team Account Model
+- **Schema**: `TeamRole` enum, `Team`, `TeamMember`, `TeamSubscription` models added; `User.teamMembers` + `User.ownedTeams` relations added; `db:push` applied
+- **`TeamService`**: `createTeam` (auto-generates slug, adds owner as admin member), `getTeam` (member-only access), `inviteMember` (JWT invite token, email stubbed), `acceptInvite` (token validation + email match check), `removeMember` (admin-only, blocks owner removal), `getTeamSubscription`
+- **`TeamController`**: wraps all service methods with validation and HTTP responses
+- **`routes/teams.ts`**: `POST /api/teams`, `GET /api/teams/:id`, `POST /api/teams/:id/invite`, `POST /api/teams/:id/accept-invite`, `DELETE /api/teams/:id/members/:userId`, `GET /api/teams/:id/subscription` — all protected by `authMiddleware`
+- **Tests**: 17 TeamService + 12 TeamController = 29 new API tests, all passing
+
+### Chunk 10.3 — Team Analytics Dashboard
+- **`TeamAnalyticsService`**: `getTeamSummary` (completions, avg score, avg streak, member count), `getMemberProgress` (per-member breakdown: lessons, score, streak, lastActive, currentSkill), `getSkillGapAnalysis` (skills ranked by avg score ascending), `getTeamLeaderboard` (top 10 by streak then lessons)
+- **Analytics routes** added to `routes/teams.ts`: `GET /api/teams/:id/analytics`, `GET /api/teams/:id/members/progress`, `GET /api/teams/:id/skill-gaps`, `GET /api/teams/:id/leaderboard`
+- **`packages/web/app/(dashboard)/team/page.tsx`**: summary stat cards, member progress table (name, streak, lessons, score, current skill), leaderboard (rank badges, streak), skill gap heatmap (coloured progress bars)
+- **Team nav link** added to dashboard layout sidebar
+- **Team API client methods + types** added to `api-client.ts`: `createTeam`, `getTeam`, `inviteTeamMember`, `acceptTeamInvite`, `removeTeamMember`, `getTeamAnalytics`, `getTeamMemberProgress`, `getTeamSkillGaps`, `getTeamLeaderboard`; exported `Team`, `TeamMember`, `TeamSummary`, `MemberProgress`, `SkillGap`, `LeaderboardEntry` interfaces
+- **Tests**: 7 TeamAnalyticsService + 7 web TeamPage = 14 new tests, all passing
+
+### Chunk 10.4 — Custom Skill Paths
+- **Schema**: `teamId String?` added to `SkillPath` (nullable, indexed); `db:push` applied
+- **`GET /api/lessons/skills`**: new endpoint — fetches skills with paths filtered by team visibility (`teamId = null` OR `teamId in user's teams`); user's team memberships resolved from JWT
+- **`AdminService.CreateSkillPathInput`**: `teamId?: string` field added so admin can scope new paths to a team
+- **Tests**: all 184 API + 54 web tests passing
+
+### Test Counts
+| Package | Before | After | New |
+|---------|--------|-------|-----|
+| API | 148 | 184 | +36 |
+| Web | 47 | 54 | +7 |
 
 ## Next Phase
 
