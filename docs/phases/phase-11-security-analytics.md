@@ -175,3 +175,62 @@ prisma.$on('query', (e) => {
 ## Next Phase
 
 [Phase 12: Testing & Launch](./phase-12-testing-launch.md)
+
+---
+
+## ✅ Implementation Summary (2026-06-08)
+
+**Chunks completed**: 11.1 (Security Hardening), 11.3 (Sentry), 11.4 (Performance Monitoring)
+**Chunk deferred**: 11.2 (Analytics) — provider not yet chosen
+
+### 11.1 — Security Hardening
+
+**JWT Token Expiry & Refresh (11.1.1)**
+- ✅ `ioredis` installed in `packages/api`
+- ✅ `packages/api/src/lib/redis.ts`: Redis client + `storeRefreshToken`, `validateRefreshToken`, `deleteRefreshToken` (SHA-256 hashed, 30d TTL)
+- ✅ `packages/api/src/middleware/jwt.ts`: `signRefreshToken` + `verifyRefreshToken` with separate `JWT_REFRESH_SECRET`; access token default now `15m`
+- ✅ `packages/api/src/services/AuthService.ts`: `register` + `login` return `{ token, refreshToken, user }`; new `refreshTokens(rawToken)` (rotates token) and `logout(userId)` methods
+- ✅ `packages/api/src/controllers/AuthController.ts`: `refresh` + `logout` handlers added
+- ✅ `packages/api/src/routes/auth.ts`: `POST /refresh` + `POST /logout` (protected) added
+- ✅ `.env.local`: `JWT_EXPIRES_IN=15m`, `JWT_REFRESH_SECRET`, `JWT_REFRESH_EXPIRES_IN=30d` added
+- ✅ `packages/web/lib/auth-context.tsx`: stores `refresh_token` in localStorage; `logout` calls API; auto-refresh on mount 401
+- ✅ `packages/web/lib/api-client.ts`: 401 interceptor with mutex-style queue; auto-refresh + retry; clears tokens on refresh failure
+- ✅ `learning-app/src/lib/api.ts`: 401 interceptor replaced simple logout with refresh flow + queue + fallback sign-out
+- ✅ `packages/api/src/__mocks__/ioredis.ts`: mock for tests
+
+**Rate Limiting (11.1.2)**
+- ✅ `express-rate-limit` installed
+- ✅ `packages/api/src/middleware/rateLimiter.ts`: `authLimiter` (5 req/15min), `aiLimiter` (10 req/min), `generalLimiter` (100 req/min)
+- ✅ Applied in `index.ts`: auth routes, coaching routes, all `/api` routes
+
+**CORS Hardening (11.1.3)**
+- ✅ `cors()` replaced with origin allowlist in `index.ts`
+- ✅ Reads `ALLOWED_ORIGINS` env var (comma-separated); defaults to `http://localhost:3001`
+- ✅ `ALLOWED_ORIGINS=http://localhost:3001` added to `.env.local`
+
+**Input Sanitisation (11.1.4)**
+- ✅ `sanitize-html` installed
+- ✅ `packages/api/src/lib/sanitise.ts`: `sanitiseContent()` with allowlist of safe HTML tags
+- ✅ Applied in `AdminService.createLesson` and `AdminService.updateLesson`
+
+### 11.3 — Sentry Error Tracking
+
+- ✅ `@sentry/node` installed in API; `@sentry/nextjs` installed in web
+- ✅ `packages/api/src/lib/sentry.ts`: `initSentry()` gracefully no-ops when `SENTRY_DSN` unset
+- ✅ API `index.ts`: `initSentry()` called before route registration
+- ✅ `authMiddleware`: calls `Sentry.setUser()` on authenticated requests
+- ✅ `error-handler.ts`: `Sentry.captureException()` on unhandled errors
+- ✅ `AIServiceClient.ts`: manual capture on circuit-open and network errors
+- ✅ `sentry.client.config.ts` + `sentry.server.config.ts` created in web package
+- ✅ `next.config.js` wrapped with `withSentryConfig` (source map upload gated on `SENTRY_AUTH_TOKEN`)
+- ✅ Mobile: already fully wired in `_layout.tsx`
+- ✅ Env placeholder vars commented in both `.env.local` files
+
+### 11.4 — Performance Monitoring
+
+- ✅ `packages/api/src/middleware/requestLogger.ts`: logs method/path/status/ms; WARN >500ms, ERROR >2000ms
+- ✅ Applied in `index.ts` before rate limiters
+- ✅ `db.ts`: Prisma query event logging in development; WARN on queries >200ms
+- ✅ `AIServiceClient.ts`: `[AI]` latency log on `generateLesson` and `coachingMessage`
+
+**Test totals**: API 206 (was 184), 27 test suites, all passing

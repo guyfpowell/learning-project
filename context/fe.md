@@ -303,3 +303,38 @@ import { User, Lesson, Skill, UserProgress } from '@learning/shared'
 - ✅ TailwindCSS responsive design
 - ✅ TypeScript strict mode passes
 
+**Design system migration** (2026-06-09):
+- ✅ Tailwind removed, design system tokens wired (ticket 1)
+- ✅ Core UI components ported to TSX in `components/ui/` (ticket 2)
+- ✅ Form components ported to TSX in `components/ui/` (ticket 3)
+- ✅ Feedback components ported; old Toast.tsx replaced (ticket 4)
+- ✅ Learning components ported to `components/learning/` (ticket 5)
+- ✅ Marketing site at `/` — all 8 sections + AuthModal (ticket 6)
+- ✅ All app pages restyled — auth, dashboard, admin (ticket 7)
+- ✅ Utility components restyled — Skeleton.tsx, LoadingSpinner.tsx (ticket 8)
+
+## App Pages — Design System Patterns (ticket 7)
+
+- Spinners: `<div style={{ borderRadius: '50%', border: '3px solid var(--neutral-200)', borderTopColor: 'var(--brand-600)', animation: 'spin 0.8s linear infinite' }} />` — needs `data-testid` for tests
+- Link-as-button: use `<Link className="asc-btn asc-btn--primary">` (Button renders `<button>`, not anchor)
+- `Tag` component uses `level` prop (`beginner | intermediate | advanced`), not `tone`
+- `LevelBadge` expects `level: number` — not suitable for string difficulty labels; use `Tag` instead
+- `ProgressBar` is in `@/components/ui`, not `@/components/learning`
+- `Switch` component requires the label and switch to be wired manually (`htmlFor` + `id`); no built-in label slot
+- `Card` `as="section"` supported for semantic HTML
+- All inline loading states: use `var(--neutral-200)` / `var(--surface-sunken)` skeleton backgrounds
+- Admin sidebar uses `var(--neutral-950)` background with `rgba(255,255,255,0.08)` dividers
+- Dashboard sidebar uses `var(--surface-inverse)`
+- `Skeleton` component: accepts `style?: CSSProperties` (not `className`); background `var(--surface-sunken)`, uses `skeleton-pulse` keyframe in globals.css
+- `LoadingSpinner`: inline styles only, uses `spin` keyframe, has `data-testid="loading-spinner"`
+
+## Marketing Site (app/page.tsx)
+
+- All sections in one file: Container + Logo helpers, Nav, Hero, HeroMock, Stat, Tracks, How, AIBand, Pricing/PlanCard, FinalCTA, Footer, AuthModal, Home
+- `@keyframes spin` added to `globals.css`
+- Auth modal is full-screen overlay (not a separate route) — `useState<'login' | 'signup' | null>`
+- `TRACK_ICONS` and `HOW_ICONS` are lookup objects mapping icon name string → `React.ReactElement`
+- `Badge` component uses `tone` prop (not `variant`)
+- `TRACKS` array typed as `Array<{ ... featured?: boolean }>` (not `as const`)
+- Tests in `app/__tests__/page.test.tsx` (19 tests)
+

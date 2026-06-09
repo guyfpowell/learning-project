@@ -1,6 +1,6 @@
 # Build Plan — Progress Tracker
 
-Last updated: 2026-04-17.
+Last updated: 2026-06-08.
 
 **Implementer instructions:**
 1. Context is cleared regularly, this document shows current status
@@ -15,24 +15,104 @@ Last updated: 2026-04-17.
 | **2** | Core Backend API | ✅ COMPLETE | 2.1–2.3 | Archive (reference only) |
 | **3** | Web Frontend | ✅ COMPLETE | 3.1–3.3 | Archive (reference only) |
 | **4** | Mobile App | ✅ COMPLETE | 4.1–4.2 | Archive (reference only) |
-| **5** | Stripe Billing | ⚪ Not started | 5.1–5.4 | After Phase 4 |
+| **5** | Stripe Billing | 🚫 CANCELLED | — | Not required |
 | **6** | AI Lesson Generation | ✅ COMPLETE | 6.1–6.6 | Archive (reference only) |
 | **7** | AI Personalization & Adaptive Learning | ✅ COMPLETE | 7.1–7.4 | Archive (reference only) |
 | **8** | Notifications & Habit Engine | ✅ COMPLETE | 8.1–8.4 | Archive (reference only) |
 | **9** | Admin CMS | ✅ COMPLETE | 9.1–9.4 | Archive (reference only) |
-| **10** | Enterprise & Team Features | 🔄 In progress (10.2 deferred) | 10.1, 10.3, 10.4 ✅ / 10.2 ⚪ | 10.2 after Phase 5 |
-| **11** | Security, Analytics & Observability | ⚪ Not started | 11.1–11.4 | After Phase 10 |
-| **12** | Testing & Launch | ⚪ Not started | 12.1–12.5 | After Phase 11 |
+| **10** | Enterprise & Team Features | ✅ COMPLETE (10.2 cancelled) | 10.1 ✅, 10.3 ✅, 10.4 ✅, 10.2 🚫 | Archive (reference only) |
+| **11** | Security, Analytics & Observability | 🔄 In progress (11.2 deferred) | 11.1 ✅, 11.3 ✅, 11.4 ✅ / 11.2 ⚪ | 11.2 after analytics provider chosen |
+| **12** | Testing & Launch | 🔄 In progress | 12.1 ✅ / 12.2–12.5 ⚪ | 12.2 — Staging Deployment |
 
 ---
 
-## Current Phase: Phase 10 — Enterprise & Team Features (10.2 deferred) → Phase 5 — Stripe Billing
+## Current Phase: Phase 12 — Testing & Launch (12.1 complete)
 
-**Previous phases**: Phases 1–4, 6–9 complete. Phase 10 chunks 10.1, 10.3, 10.4 complete. Chunk 10.2 (Team Stripe billing) deferred until Phase 5 (individual Stripe) is done.
+**Previous phases**: Phases 1–4, 6–11 (partially) complete. Phase 5 (Stripe) cancelled. Phase 10 chunks 10.1, 10.3, 10.4 complete; 10.2 cancelled. Phase 11 chunks 11.1, 11.3, 11.4 complete; 11.2 deferred.
+
+**Phase 12 status**: Chunk 12.1 (Integration & E2E Testing) complete. Chunks 12.2–12.5 not started.
 
 ---
 
-## Phase 10 — Enterprise & Team Features (PARTIALLY COMPLETE)
+## Phase 12 — Testing & Launch (IN PROGRESS)
+
+### Chunk 12.1 — Integration & E2E Testing — COMPLETE (2026-06-09)
+
+**12.1.1 — Backend Integration Tests**
+- ✅ Extracted `packages/api/src/app.ts` (pure Express config) from `index.ts` (server start + jobs) — enables Supertest imports without side effects
+- ✅ Rate limiters skipped in `NODE_ENV=test` (`app.ts`)
+- ✅ `jest.integration.cjs` — separate config, real Prisma (test DB), mocked Redis (in-memory), 30s timeout, `--runInBand`
+- ✅ `packages/api/.env.test` — `DATABASE_URL` → `learning_app_test` on port 5433
+- ✅ `globalSetup.ts` — creates test DB and runs `prisma db push` before suite
+- ✅ Auth integration tests (5 suites): register → login → `/me` → refresh → logout → refresh-after-logout
+- ✅ Lesson integration tests (4 suites): `GET /today` → `GET /:id` → `POST /:id/complete` → `POST /:id/quiz` (score 100 + streak check)
+- ✅ Team integration tests (4 suites): create team → get team → invite member → accept invite → duplicate-accept rejected
+- ✅ Admin integration tests (5 suites): admin-only skill/path/lesson creation; 403 for non-admin; lesson served to regular user; unpublish toggle
+- ✅ Subscription flow skipped (Phase 5 cancelled)
+- ✅ `test:integration` script added to `packages/api/package.json`
+- ✅ Unit tests still pass: 206 tests, 27 suites
+- ✅ Integration tests: 32 tests, 5 suites, all passing
+
+**12.1.4 — AI Generation Integration Tests** (bundled with 12.1.1)
+- ✅ `aiGeneration.integration.test.ts` — tests against real Prisma DB
+- ✅ Static fallback path tested (serves lesson from DB when AI service unavailable)
+- ✅ Cache assertion conditional on `AI_SERVICE_API_KEY` being set (skips when key absent)
+- ✅ All 3 skill levels (beginner/intermediate/advanced) exercise the fallback path
+- ✅ Graceful fallback when AI URL is unreachable
+
+**12.1.2 — Web E2E Tests (Playwright)**
+- ✅ `@playwright/test` installed in `packages/web`
+- ✅ `playwright.config.ts` — Chromium, `http://localhost:3001`, auto-starts dev server locally, `E2E_BASE_URL` override for staging
+- ✅ `e2e/auth-lesson.spec.ts`: sign-up → onboarding → dashboard → lesson → quiz flow; login → progress → settings → save → logout flow
+- ✅ `e2e/admin.spec.ts`: admin login → create lesson → verify lesson visible to regular user
+- ✅ `test:e2e` and `test:e2e:ui` scripts added
+- **To run**: API + web servers must be running; requires `npx playwright install chromium` on first run
+
+**12.1.3 — Mobile E2E Tests (Detox)**
+- ✅ `detox` + `@config-plugins/detox` installed in `learning-app`
+- ✅ `.detoxrc.js` — iOS simulator (iPhone 16) + Android emulator configs
+- ✅ `e2e/jest.config.js` — Detox Jest runner
+- ✅ `e2e/auth-lesson.e2e.ts` — sign-up flow, lesson tab, progress tab with streak, notification permission
+- ✅ `testID` attributes added to all key UI elements: `signin-email`, `signin-password`, `signin-submit`, `register-name/email/password/confirm/submit`, `lesson-card`, `lesson-title`, `lesson-quiz-btn`, `progress-streak`, `progress-lessons-count`, `progress-avg-score`
+- ✅ `e2e:build:ios`, `e2e:build:android`, `e2e:test:ios`, `e2e:test:android` scripts added
+- **To run**: requires `expo prebuild` → native build first (will be done in chunk 12.4)
+
+---
+
+## Phase 11 — Security, Analytics & Observability (PARTIALLY COMPLETE)
+
+### Chunks 11.1, 11.3, 11.4 — COMPLETE (2026-06-08)
+
+**Security Hardening (11.1)**
+- ✅ JWT short-lived access tokens (15m) + long-lived refresh tokens (30d) — stored hashed in Redis
+- ✅ `POST /api/auth/refresh` + `POST /api/auth/logout` endpoints added
+- ✅ Web `api-client.ts`: 401 interceptor with mutex queue — auto-refresh + retry + fallback clear
+- ✅ Web `auth-context.tsx`: stores `refresh_token` in localStorage, logout calls API
+- ✅ Mobile `api.ts`: 401 interceptor replaced simple logout with refresh flow + queue + fallback sign-out
+- ✅ Rate limiting: `authLimiter` (5/15min), `aiLimiter` (10/min), `generalLimiter` (100/min)
+- ✅ CORS locked to `ALLOWED_ORIGINS` env var (defaults `http://localhost:3001`)
+- ✅ Lesson content sanitised with `sanitize-html` on every admin save
+
+**Sentry Error Tracking (11.3)**
+- ✅ `@sentry/node` in API, `@sentry/nextjs` in web, `@sentry/react-native` already in mobile
+- ✅ API: `initSentry()` gracefully no-ops without `SENTRY_DSN`; user context set on auth; unhandled errors captured
+- ✅ Web: `sentry.client.config.ts` + `sentry.server.config.ts`; `next.config.js` wrapped with `withSentryConfig`
+- ✅ AI client: manual capture on circuit-open and network errors
+
+**Performance Monitoring (11.4)**
+- ✅ `requestLogger` middleware: logs method/path/status/ms; WARN >500ms, ERROR >2000ms
+- ✅ Prisma slow query logging (>200ms, dev only)
+- ✅ AI latency logging in `AIServiceClient` (`generateLesson`, `coachingMessage`)
+
+### Chunk 11.2 — DEFERRED
+
+Analytics provider not yet chosen. Defer until Mixpanel or Plausible is selected.
+
+**Test totals**: API 206 (was 184), 27 suites, all passing
+
+---
+
+## Phase 10 — Enterprise & Team Features (COMPLETE — 10.2 cancelled)
 
 ### Chunks 10.1, 10.3, 10.4 — COMPLETE (2026-04-30)
 

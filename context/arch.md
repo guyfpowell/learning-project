@@ -51,10 +51,11 @@ last_updated: 2026-04-12
 - **Notifications** (`/api/notifications`): GET/PATCH user notification preferences (protected)
 
 **Auth Pattern**:
-- JWT tokens stored in Authorization header (Bearer token).
-- authMiddleware extracts JWT, validates, and sets `req.user` (contains userId + email).
-- Protected routes check authMiddleware before controller execution.
-- No token expiry/refresh yet (TODO for Phase 6 launch).
+- JWT access tokens (15m expiry) stored in Authorization header (Bearer token).
+- Refresh tokens (30d) stored as SHA-256 hashes in Redis (`refresh:{userId}`).
+- `POST /api/auth/refresh` rotates both tokens. `POST /api/auth/logout` revokes refresh token.
+- authMiddleware extracts JWT, validates, sets `req.user` (id + email + role), and sets Sentry user context.
+- Web + mobile both have 401 interceptors that auto-refresh silently before redirecting to login.
 
 **Error Handling**:
 - AppError class: `new AppError(code, message, statusCode)`.
@@ -147,10 +148,10 @@ last_updated: 2026-04-12
 
 **Why**: Supports adaptive difficulty. Users select a skill, get assigned a path based on assessment, then progress through lessons.
 
-### 7. Subscription Stripe Integration (Stubbed)
-**Decision**: SubscriptionPlan models exist with pricing. Subscription model has stripeCustomerId + stripeSubscriptionId fields. Webhook routes exist but not fully wired.
+### 7. Subscription Model (Stripe stubs retained)
+**Decision**: Phase 5 (Stripe billing) was cancelled — not required for this product. `Subscription`, `SubscriptionPlan`, `StripeEventLog` models and nullable stripe ID fields remain in schema but are never populated by real payments.
 
-**Why**: Prepared for Stripe integration (Phase 2+ stretch goal). Can mock subscriptions for frontend development.
+**Why retained**: Subscription tier model (`free/starter/pro/premium`) is still used for AI coaching tier enforcement (`detectPlan` middleware). Stripe fields are harmless stubs.
 
 ### 9. Personalization Layer (ADR-002 — accepted, Phase 7)
 **Algorithm services** (`packages/api/src/ai/`): `RecommendationEngine` (UCB1 bandit, lesson selection), `SkillTracker` (Elo rating, difficulty routing), `LearningStyleClassifier` (rule-based, style detection). These are computation units — they may read from Prisma but route all writes through the service layer.
@@ -244,15 +245,16 @@ last_updated: 2026-04-12
 
 ## Architectural Gaps & Technical Debt
 
-| Issue | Impact | Severity | Phase |
-|-------|--------|----------|-------|
-| **No token expiry/refresh** | Leaked tokens valid forever | MEDIUM | 6 (launch) |
-| **No rate limiting** | API vulnerable to abuse | MEDIUM | 6 (launch) |
-| **Stripe integration stubbed** | Can't charge users | HIGH | 2+ (stretch) |
-| **AI lesson generation stubbed** | Lessons hardcoded in DB | MEDIUM | 2+ (stretch) |
-| **No email notifications** | Can't remind users | MEDIUM | 5 (polish) |
-| **No mobile app** | iOS/Android unavailable | HIGH | 4 (scope) |
-| **No analytics/observability** | Can't track user behavior | LOW | Future |
+| Issue | Impact | Severity | Phase | Status |
+|-------|--------|----------|-------|--------|
+| **No token expiry/refresh** | Leaked tokens valid forever | MEDIUM | 11 | ✅ FIXED — 15m access / 30d refresh via Redis |
+| **No rate limiting** | API vulnerable to abuse | MEDIUM | 11 | ✅ FIXED — authLimiter / aiLimiter / generalLimiter |
+| **CORS open (*)** | Any origin can call API | MEDIUM | 11 | ✅ FIXED — ALLOWED_ORIGINS allowlist |
+| **No input sanitisation** | XSS risk on lesson content | MEDIUM | 11 | ✅ FIXED — sanitize-html on admin lesson save |
+| **Stripe integration stubbed** | Can't charge users | N/A | — | 🚫 CANCELLED — not required |
+| **No analytics** | Can't track user behaviour | LOW | 11.2 | ⚪ DEFERRED — provider not chosen |
+| **No email notifications** | Can't remind users | MEDIUM | 12 | Push notifications live (Phase 8); email deferred |
+| **No CI/CD** | No quality gate on push | MEDIUM | 12 | Phase 12 scope |
 
 ---
 
@@ -286,18 +288,34 @@ last_updated: 2026-04-12
 
 ### Sensitive Data
 - JWT tokens in Authorization header (not cookies — prevents CSRF but requires manual handling in mobile).
+- Refresh tokens stored hashed in Redis, never in DB or client logs.
 - Database connection string in .env.
-- Stripe API key in .env (future).
 
-### Missing Mitigations (TODO for Phase 6)
-- No HTTPS enforcement (dev only).
-- No CORS whitelist (currently `*`).
-- No rate limiting on auth endpoints (DDoS risk).
-- No input sanitization (XSS risk if lesson content user-generated).
+### Hardened in Phase 11
+- ✅ CORS locked to `ALLOWED_ORIGINS` allowlist (was `*`).
+- ✅ Rate limiting on auth (5/15min), AI (10/min), general (100/min).
+- ✅ Admin lesson content sanitised with `sanitize-html` before storage.
+- ✅ Sentry error tracking wired (API + web + mobile); no-ops without DSN.
+- ✅ Request logger + Prisma slow query logging + AI latency logging.
+
+### Remaining gaps
+- No HTTPS enforcement (dev only — handled at infra layer in prod).
+- No CI/CD quality gate (Phase 12 scope).
 
 ---
 
 ## Change Log
+
+**2026-06-08** — Phase 11: Security, Analytics & Observability (11.1, 11.3, 11.4 complete; 11.2 deferred)
+- JWT auth upgraded: 15m access tokens + 30d refresh tokens stored hashed in Redis
+- New routes: `POST /api/auth/refresh`, `POST /api/auth/logout`
+- Rate limiting middleware added (auth/AI/general tiers)
+- CORS hardened to allowlist (`ALLOWED_ORIGINS` env var)
+- Lesson content sanitised with `sanitize-html` on admin save
+- Sentry wired across API, web, mobile (graceful no-op without DSN)
+- Request logger, Prisma slow query logging, AI latency logging added
+- Phase 5 (Stripe) cancelled; Phase 10.2 (Team Stripe) cancelled
+- API test count: 206 (was 184)
 
 **2026-04-17** — ADR-003: Push Notification Architecture (Phase 8)
 - Mobile: Expo Push Service (`expo-server-sdk`) — no Firebase account required

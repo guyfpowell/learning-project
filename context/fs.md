@@ -1,6 +1,6 @@
 ---
 title: FS Agent Context — Learning App
-last_updated: 2026-04-30
+last_updated: 2026-06-09
 ---
 
 # Learning App — Full Stack Context
@@ -35,14 +35,16 @@ last_updated: 2026-04-30
 | **2** | Core Backend API (auth, lesson delivery, subscriptions) | ✅ COMPLETE |
 | **3** | Web Frontend (auth, dashboard, lessons, progress) | ✅ COMPLETE |
 | **4** | Mobile App (React Native/Expo parity) | ✅ COMPLETE |
-| **5** | Stripe Billing | ⚪ Not started — NEXT |
+| **5** | Stripe Billing | 🚫 CANCELLED — not required |
 | **6** | AI Lesson Generation | ✅ COMPLETE |
 | **7** | AI Personalization & Adaptive Learning | ✅ COMPLETE |
 | **8** | Notifications & Habit Engine | ✅ COMPLETE |
 | **9** | Admin CMS | ✅ COMPLETE |
-| **10** | Enterprise & Team Features | 🔄 In progress (10.1, 10.3, 10.4 ✅; 10.2 deferred to after Phase 5) |
+| **10** | Enterprise & Team Features | ✅ COMPLETE (10.2 cancelled — depended on Phase 5) |
+| **11** | Security, Analytics & Observability | 🔄 In progress (11.1 ✅, 11.3 ✅, 11.4 ✅; 11.2 deferred — analytics provider not chosen) |
+| **12** | Testing & Launch | ⚪ Not started — NEXT |
 
-**MVP Target**: Phases 1–2 complete. Phase 3 (web frontend) is the immediate next step. Full MVP = 12 weeks (Phases 1–3 + core Phase 6).
+**Current status**: Phases 1–4, 6–11 (mostly) complete. Phase 5 cancelled. Phase 12 (Testing & Launch) is next.
 
 ---
 
@@ -195,6 +197,14 @@ learning/
 - Redis: 6380 (localhost)
 - API: 3000 (http://localhost:3000/health)
 - Web: 3001 (http://localhost:3001)
+- Ollama: 11434 (container `learning-ollama`, NOT a Mac app — `ollama` CLI is not in host PATH)
+
+**Ollama commands must be run via Docker exec:**
+```bash
+docker exec learning-ollama ollama pull <model>
+docker exec learning-ollama ollama list
+docker exec learning-ollama ollama run <model>
+```
 
 **DB Credentials (local)**:
 - User: `learning_user`
@@ -362,7 +372,93 @@ pnpm db:reset     # Reset database
 
 **Important**: `GET /api/lessons/skills` endpoint was missing before Phase 10 — now added with team visibility. The api-client referenced `/lessons/skills` but the route didn't exist prior to this.
 
+## Phase 11 Architecture Notes (added 2026-06-08)
+
+**Auth flow now uses short-lived access tokens (15m) + long-lived refresh tokens (30d)**:
+- Refresh tokens stored as SHA-256 hashes in Redis (`refresh:{userId}`, TTL 30d)
+- New endpoints: `POST /api/auth/refresh` (public), `POST /api/auth/logout` (protected)
+- Web api-client has 401 interceptor with mutex queue; auth-context stores `refresh_token` in localStorage
+- Mobile `api.ts` has same refresh flow replacing previous logout-on-401
+- `JWT_REFRESH_SECRET` and `JWT_REFRESH_EXPIRES_IN=30d` added to `.env.local`
+
+**Security hardening**:
+- Rate limiters: `authLimiter` (5/15min), `aiLimiter` (10/min), `generalLimiter` (100/min) in `middleware/rateLimiter.ts`
+- CORS: allowlist via `ALLOWED_ORIGINS` env var (defaults `http://localhost:3001`)
+- Input sanitisation: `lib/sanitise.ts` with `sanitiseContent()` — applied in `AdminService.createLesson` + `updateLesson`
+
+**Observability**:
+- Sentry: API (`lib/sentry.ts`), web (`sentry.client/server.config.ts`), mobile (already wired). Gracefully no-ops without `SENTRY_DSN`.
+- Request logger: `middleware/requestLogger.ts` — WARN >500ms, ERROR >2000ms
+- Prisma slow query logging (>200ms) in `db.ts` (dev only)
+- AI latency logging in `AIServiceClient.ts`
+
+**New dependencies**: `ioredis`, `express-rate-limit`, `sanitize-html`, `@sentry/node` (API); `@sentry/nextjs` (web)
+**Test count**: 206 API tests (was 184), 27 suites
+
+## Phase 12 Architecture Notes (added 2026-06-09)
+
+**New file**: `packages/api/src/app.ts` — pure Express app (no listen, no jobs). `index.ts` now just imports it and calls `app.listen()` + starts cron jobs. Integration tests import `app.ts` directly via Supertest.
+
+**Rate limiters**: `app.ts` skips rate limiters when `NODE_ENV=test`.
+
+**Integration test stack**:
+- Config: `packages/api/jest.integration.cjs` — real Prisma (`learning_app_test` DB), in-memory Redis mock, 30s timeout, `--runInBand`
+- `.env.test`: `DATABASE_URL=postgresql://learning_user:learning_password@localhost:5433/learning_app_test`
+- Test DB setup: `globalSetup.ts` runs `prisma db push --skip-generate`
+- Run: `pnpm test:integration` from `packages/api`
+
+**Playwright** (web E2E):
+- Config: `packages/web/playwright.config.ts` — Chromium, `http://localhost:3001` (override with `E2E_BASE_URL`)
+- Tests: `packages/web/e2e/auth-lesson.spec.ts`, `packages/web/e2e/admin.spec.ts`
+- Run: `pnpm test:e2e` from `packages/web` (auto-starts dev server locally; requires API running separately)
+- First run: `npx playwright install chromium`
+
+**Detox** (mobile E2E):
+- Config: `learning-app/.detoxrc.js` — iOS simulator (iPhone 16) + Android emulator
+- Tests: `learning-app/e2e/auth-lesson.e2e.ts`
+- Run: `pnpm e2e:build:ios && pnpm e2e:test:ios` from `learning-app`
+- Prerequisite: `expo prebuild` → native build (done in chunk 12.4)
+- `testID` attributes added to: sign-in screen, register screen, lessons tab, progress tab
+
+**Test counts** (after 12.1): API 206 unit + 32 integration; Web 54 unit + Playwright E2E; Mobile 149 unit + Detox E2E
+
+## Lesson Generation Scripts (added 2026-06-09)
+
+Content generation is offline batch, not realtime. Scripts live in `learning/scripts/`.
+
+| File | Purpose |
+|------|---------|
+| `lesson-config.py` | Shared data: TRACKS, LEVEL_GUIDANCE, prompt builders. Edit this to add new tracks/levels. |
+| `generate-lessons.py` | **Online** — Claude API, 10 parallel requests. Primary script. |
+| `generate-lessons-local.py` | **Offline** — Ollama, sequential. Retained for local use or cost-free generation. |
+| `.env` | API key storage — gitignored. `ANTHROPIC_API_KEY=sk-ant-...` |
+| `.env.example` | Template for the above. |
+
+**Architecture note**: The `learning-ai` project (`/Users/guypowell/Documents/Projects/learning-ai`) was built for realtime per-request AI generation. That model has been abandoned in favour of offline batch. `learning-ai` is archived — do not extend or deploy it.
+
+**To add new track levels** (e.g. AI track intermediate/advanced/expert):
+1. Write lesson sequences in `lesson-config.py` under the relevant track/level
+2. Run `python3 scripts/generate-lessons.py` (or `--test` first)
+3. Seed: `pnpm --filter api prisma:seed`
+
+**Output flow**: `generate-lessons.py` → `prisma/generated-lessons.json` → `prisma/seed.ts`
+
+**Checkpoint**: `prisma/generate-checkpoint.json` — safe to delete. Script resumes from it if interrupted.
+
+---
+
 ## Change Log
+
+**2026-06-09** — LESSON GENERATION SCRIPTS REFACTORED
+- Moved from Ollama-only to Claude API as primary generator
+- Split into three files: `lesson_config.py` (shared data), `generate-lessons.py` (Claude API, parallel), `generate-lessons-local.py` (Ollama, sequential, retained)
+- API key stored in `scripts/.env` (gitignored), loaded by script at runtime — no terminal export needed
+- Added `--test` mode to both scripts (2 lessons, no checkpoint write)
+- Added "plain text only, no markdown" rule to `build_prompt_single_lesson`
+- AI for Product Managers — beginner track (80 lessons) generated and in `prisma/generated-lessons.json`
+- `learning-ai` project archived — realtime generation model abandoned in favour of offline batch
+
+
 
 **2026-04-12** — ROUTE GROUP FIX (Best Practice Alignment)
 - Fixed all frontend page routes to follow Next.js App Router best practices

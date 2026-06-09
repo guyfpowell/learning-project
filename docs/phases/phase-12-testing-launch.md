@@ -1,6 +1,6 @@
 # Phase 12: Testing & Launch
 
-**Status**: ⚪ NOT STARTED
+**Status**: 🔄 IN PROGRESS — Chunk 12.1 ✅ complete (2026-06-09)
 
 **Goal**: Comprehensive testing of all flows across all layers, staging and production deployment, mobile app store submission, and launch execution.
 
@@ -202,6 +202,47 @@ eas build --platform ios --profile production
 - Lesson completion rate: >85%
 - Free → paid conversion: >10% within 30 days
 - App store rating: >4.5/5
+
+---
+
+## ✅ Implementation Summary — Chunk 12.1 (2026-06-09)
+
+### What was implemented
+
+**Backend infrastructure changes**:
+- `packages/api/src/app.ts` — new file: pure Express app export (no `app.listen`, no jobs). `index.ts` now just calls listen + starts cron jobs. This enables Supertest in integration tests without side effects.
+- `app.ts` skips rate limiters when `NODE_ENV=test`.
+- `jest.integration.cjs` — separate Jest config for integration tests: real Prisma (test DB), Redis mocked in-memory, 30s timeout, sequential (`--runInBand`).
+- `.env.test` — test DB (`learning_app_test`), test JWT secrets.
+- `src/__integration__/globalSetup.ts` — creates `learning_app_test` DB and runs `prisma db push` before the suite.
+
+**Backend integration tests** (`packages/api/src/__integration__/`, 32 tests):
+- `auth.integration.test.ts` — full token lifecycle: register → login → `/me` → refresh → logout → refresh-after-logout rejected
+- `lesson.integration.test.ts` — seeded skill/path/lesson/quiz; today's lesson → complete → quiz score 100 → streak increment
+- `team.integration.test.ts` — create team → get team → invite member → accept invite → duplicate rejected
+- `admin.integration.test.ts` — admin-created skill/path/lesson; 403 for non-admin; lesson readable by regular user; unpublish toggle
+- `aiGeneration.integration.test.ts` — static fallback for all 3 skill levels; cache skip when no API key; graceful handling of unreachable AI service
+
+**Web E2E (Playwright)** (`packages/web/e2e/`, 2 spec files):
+- `auth-lesson.spec.ts` — sign-up → onboarding → dashboard → lesson → quiz flow; login → progress → settings → save → logout
+- `admin.spec.ts` — admin creates lesson, verifies it's readable by regular user via API
+- `playwright.config.ts` — Chromium, base URL configurable via `E2E_BASE_URL`
+- Scripts: `test:e2e`, `test:e2e:ui`
+- **Run prerequisite**: `npx playwright install chromium` (first time); API + web servers running
+
+**Mobile E2E (Detox)** (`learning-app/e2e/`, 1 test file):
+- `auth-lesson.e2e.ts` — sign-up flow, lesson tab, progress tab (streak), notification permission on launch
+- `.detoxrc.js` — iOS simulator (iPhone 16) + Android emulator configs
+- `testID` props added: `signin-email/password/submit`, `register-name/email/password/confirm/submit`, `lesson-card/title/quiz-btn`, `progress-streak/lessons-count/avg-score`
+- Scripts: `e2e:build:ios`, `e2e:build:android`, `e2e:test:ios`, `e2e:test:android`
+- **Run prerequisite**: `expo prebuild` + native build (covered in chunk 12.4)
+
+### Test counts after chunk 12.1
+- API unit tests: **206** (unchanged)
+- API integration tests: **32** (new)
+- Web unit tests: **54** (unchanged)
+- Playwright E2E: **2 spec files** (run against live servers)
+- Mobile Detox: **1 spec file** (run after `expo prebuild`)
 
 ---
 
