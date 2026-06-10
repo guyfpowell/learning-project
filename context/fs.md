@@ -449,6 +449,22 @@ Content generation is offline batch, not realtime. Scripts live in `learning/scr
 
 ## Change Log
 
+**2026-06-09** — FREEMIUM TRACK ACCESS (all chunks complete)
+
+Seed bugs fixed (3 silent failures that caused generated lessons to never load):
+- `UserSkillRating` has no cascade-delete from `Skill` — seed now deletes `userSkillRating` first
+- `__dirname` undefined in ESM context — seed now uses `fileURLToPath(import.meta.url)`
+- `generated-lessons.json` has `quiz` as an array — seed was accessing it as an object (`l.quiz[0]` fix)
+- `pnpm db:seed` swallows all output/errors — always run seed directly: `cd packages/api && npx tsx ../../prisma/seed.ts`
+
+LessonService bugs fixed (2):
+- Track-switch: incomplete progress from old track overrode `profile.goal` — filter `incompleteLessons` to enrolled skill only
+- Post-completion loop: after completing a lesson, code routed back to day 1 — now excludes completed lesson IDs when finding next lesson
+
+Scripts added to `learning/scripts/`:
+- `upgrade-user.ts` — creates or updates a subscription to `pro` for a given email (upsert-safe)
+- `diagnose-user.ts` — dumps profile.goal, subscription, progress records, and published lesson counts per skill
+
 **2026-06-09** — LESSON GENERATION SCRIPTS REFACTORED
 - Moved from Ollama-only to Claude API as primary generator
 - Split into three files: `lesson_config.py` (shared data), `generate-lessons.py` (Claude API, parallel), `generate-lessons-local.py` (Ollama, sequential, retained)

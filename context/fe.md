@@ -291,6 +291,17 @@ import { User, Lesson, Skill, UserProgress } from '@learning/shared'
 
 ---
 
+## Route Map
+
+```
+(dashboard)/
+├── dashboard/page.tsx   → /
+├── tracks/page.tsx      → /tracks  (new — Chunk 2)
+├── progress/            → /progress
+├── settings/            → /settings
+└── team/                → /team
+```
+
 ## Build Output
 
 **Completed** (2026-04-12):
@@ -313,6 +324,12 @@ import { User, Lesson, Skill, UserProgress } from '@learning/shared'
 - ✅ All app pages restyled — auth, dashboard, admin (ticket 7)
 - ✅ Utility components restyled — Skeleton.tsx, LoadingSpinner.tsx (ticket 8)
 
+**Freemium — Chunk 2** (2026-06-09):
+- ✅ `/tracks` page — `app/(dashboard)/tracks/page.tsx`
+- ✅ Dashboard updated to show enrolled track name + `/tracks` link
+- ✅ Sidebar nav: Tracks added between Dashboard and Progress
+- ✅ `SkillWithAccess` added to `@learning/shared`, `getSkills()` returns `SkillWithAccess[]`
+
 ## App Pages — Design System Patterns (ticket 7)
 
 - Spinners: `<div style={{ borderRadius: '50%', border: '3px solid var(--neutral-200)', borderTopColor: 'var(--brand-600)', animation: 'spin 0.8s linear infinite' }} />` — needs `data-testid` for tests
@@ -327,6 +344,7 @@ import { User, Lesson, Skill, UserProgress } from '@learning/shared'
 - Dashboard sidebar uses `var(--surface-inverse)`
 - `Skeleton` component: accepts `style?: CSSProperties` (not `className`); background `var(--surface-sunken)`, uses `skeleton-pulse` keyframe in globals.css
 - `LoadingSpinner`: inline styles only, uses `spin` keyframe, has `data-testid="loading-spinner"`
+- `Badge` `tone` values: `neutral | brand | coral | success | xp | danger | outline` (not `variant`)
 
 ## Marketing Site (app/page.tsx)
 

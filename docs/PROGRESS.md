@@ -32,6 +32,8 @@ Last updated: 2026-06-08.
 
 **Phase 12 status**: Chunk 12.1 (Integration & E2E Testing) complete. Chunks 12.2–12.5 not started.
 
+**Active parallel work**: Freemium track access feature — see [docs/freemium-build.md](./freemium-build.md). Chunk 1 (schema + backend) complete. Chunk 2 (Tracks page frontend) is next.
+
 ---
 
 ## Phase 12 — Testing & Launch (IN PROGRESS)
