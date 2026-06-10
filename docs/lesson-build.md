@@ -129,12 +129,21 @@ pnpm --filter api prisma:seed
 
 ## Controlling What Gets Generated
 
-Edit `TRACKS_TO_RUN` near the top of the script you're running:
+Use the `--tracks` flag (no source editing needed):
 
-```python
-TRACKS_TO_RUN = ["AI for Product Managers"]   # only this track
-TRACKS_TO_RUN = None                           # all tracks
+```bash
+python3 scripts/generate-lessons.py --batch --tracks "AI for Product Managers" "Product Strategy"
 ```
+
+If `--tracks` is omitted, the `TRACKS_TO_RUN` default at the top of the script is used
+(currently AI for Product Managers + Product Strategy; set to `None` for all tracks).
+Unknown track names fail fast with the list of valid names.
+
+**Generation is incremental (2026-06-10):** any lesson already present in
+`prisma/generated-lessons.json` (keyed by track | level | topic | lessonIndex) is skipped
+automatically, and results merge into the existing file without duplicates. The workflow for
+future batches is simply: add new tracks/levels/topics to `lesson_config.py`, then re-run —
+only the delta is generated.
 
 To regenerate from scratch: delete `prisma/generated-lessons.json` and `prisma/generate-checkpoint.json`, then re-run.
 
@@ -333,7 +342,7 @@ When starting a new track:
 
 | # | Track | Status |
 |---|---|---|
-| 1 | Product Strategy | ⚪ Not started |
+| 1 | Product Strategy | ✅ All four levels sequenced — ready to generate |
 | 2 | Discovery & Research | ⚪ Not started |
 | 3 | Execution & Delivery | ⚪ Not started |
 | 4 | Metrics & Analytics | ⚪ Not started |
@@ -341,14 +350,17 @@ When starting a new track:
 | 6 | Stakeholder Management | ⚪ Not started |
 | 7 | Go-to-Market & Launch | ⚪ Not started |
 | 8 | Product Communication | ⚪ Not started |
-| 9 | Product Design & UX for PMs | ⚪ Not started — new track |
-| 10 | Technical Skills for PMs | ⚪ Not started — new track |
+| 9 | AI for Product Managers | ✅ All four levels sequenced — ready to generate |
+| 10 | Product Design & UX for PMs | ⚪ Not started — new track |
+| 11 | Technical Skills for PMs | ⚪ Not started — new track |
+
+Track order above matches the `TRACKS` list order in `lesson_config.py` (reordered 2026-06-10 — AI for Product Managers moved to position 9, after Product Communication).
 
 ---
 
 ## Track 1: Product Strategy
 
-**Status:** ⚪ Not started — topics exist in flat format, sequences not designed
+**Status:** ✅ All four levels sequenced and in `lesson_config.py` (2026-06-10) — 42 topics, 336 lessons. Not yet generated.
 
 **Category:** `product-management`
 
@@ -358,40 +370,30 @@ When starting a new track:
 
 | Level | Who it's for | Status |
 |---|---|---|
-| Beginner | PMs who are new to strategy thinking | ⚪ Topics exist, needs structured sequences |
-| Intermediate | PMs who can set strategy and need sharper tools | ⚪ Topics exist, needs structured sequences |
-| Advanced | Senior PMs and leads owning strategic direction | ⚪ Topics exist, needs structured sequences |
-| Expert | Directors and VPs setting company-level product strategy | ⚪ Missing — needs topics and sequences |
+| Beginner | PMs who are new to strategy thinking | ✅ Sequences written — in `lesson_config.py` |
+| Intermediate | PMs who can set strategy and need sharper tools | ✅ Sequences written — in `lesson_config.py` |
+| Advanced | Senior PMs and leads owning strategic direction | ✅ Sequences written — in `lesson_config.py` |
+| Expert | Directors and VPs setting company-level product strategy | ✅ Sequences written — in `lesson_config.py` |
 
-### Beginner — current topics (flat format, needs structured sequences)
+### Beginner — ✅ Complete
 
-Review notes inline. Sharpen any flagged titles before designing sequences.
+10 topics × 8 lessons = 80 lessons. In `lesson_config.py`.
 
-1. What is product strategy and why it matters
-2. Understanding your users before setting strategy
-3. Defining your target market segment
-4. Writing a compelling product vision statement
-5. Competitive analysis basics for PMs
-6. Value proposition design
-7. Setting SMART product goals ⚠️ *"SMART goals" is dated and generic — consider "Setting goals that actually guide decisions"*
-8. The difference between strategy and roadmap
-9. Prioritisation fundamentals ⚠️ *Overlaps with Execution & Delivery track — discuss whether to keep here or remove*
-10. Communicating strategy to your team
+**Changes made during sequence design:**
+- Topic 7 renamed: "Setting SMART product goals" → "Setting goals that actually guide decisions"
+- Topic 9 renamed: "Prioritisation fundamentals" → "Prioritisation as a strategic skill" — `through_line` added to keep it strategy-flavoured; execution frameworks (RICE etc.) belong in Execution & Delivery track. Minor overlap with that track is intentional.
 
-### Intermediate — current topics (flat format, needs structured sequences)
+### Intermediate — ✅ Complete
 
-1. Jobs to be done as a strategy lens
-2. Market sizing: TAM, SAM, and SOM
-3. Identifying and strengthening product moats
-4. Product-market fit — signals and how to measure them
-5. Platform vs point solution strategy
-6. Strategic bets under uncertainty ⚠️ *Too vague — sharpen to something like "Making a bet you can defend — structured decision-making under uncertainty"*
-7. Network effects in product design
-8. Growth loops and compounding advantages
-9. Freemium as a strategic choice
-10. Sequencing your market entry
+10 topics × 8 lessons = 80 lessons. In `lesson_config.py`.
 
-### Advanced — current topics (flat format, needs structured sequences)
+**Changes made during sequence design:**
+- Topic 6 renamed: "Strategic bets under uncertainty" → "Making a bet you can defend" — `through_line` added: structured decision-making under uncertainty; a bet has explicit assumptions, evidence thresholds, and conditions for changing course.
+- Topic 1 ("Jobs to be done as a strategy lens") — `through_line` added: use JTBD framework and terminology, credit Clayton Christensen, cover hire/fire metaphor and all three job dimensions (functional, social, emotional).
+
+### Advanced — ✅ Complete (2026-06-10)
+
+11 topics × 8 lessons = 88 lessons. In `lesson_config.py`. (Topic 11 is a bonus topic added during sequence design, same pattern as the AI track.)
 
 1. Category creation vs market disruption
 2. Ecosystem strategy and partner leverage
@@ -402,22 +404,55 @@ Review notes inline. Sharpen any flagged titles before designing sequences.
 7. Strategic pivots — when and how
 8. Two-sided markets and platform design
 9. Building a strategic narrative for executives
-10. Long-range product strategy under ambiguity ⚠️ *Too vague — sharpen to "Planning beyond 18 months — how to think about strategy when you can't predict the market"*
+10. Planning beyond 18 months — how to think about strategy when you can't predict the market
+11. Strategy for the mature product — finding your second act before the first one fades *(bonus topic)*
 
-### Expert — missing, proposed topics
+**Changes made during sequence design:**
+- Topic 10 renamed: "Long-range product strategy under ambiguity" → "Planning beyond 18 months — how to think about strategy when you can't predict the market" (applying the sharpening flagged in the earlier review).
+- Topic 11 added as a bonus: nothing covered diagnosing a flattening growth curve and sequencing renewal — topic 4 covers expansion *options* and Expert topic 7 covers *killing* a product line, but not the diagnosis in between. Uses the S-curve as the organising mental model.
+- `through_line` added to six topics to carve boundaries against neighbouring content:
+  - Topic 1 — credit Christensen, use "disruption" precisely (not a synonym for innovation); category design as the alternative playbook; head-on competition as the legitimate third option.
+  - Topic 2 — leveraging ecosystems you *don't* own; owning a platform is topic 8, platform-at-company-scale is expert level.
+  - Topic 3 — strategy-level pricing only; launch pricing/packaging mechanics stay in the Go-to-Market track.
+  - Topic 6 — strategy lens (differentiation, control, optionality); delivery-level build-vs-buy economics stay in Execution & Delivery; AI-specific version stays in the AI track.
+  - Topic 8 — builds on intermediate network effects topic; assumes the four types and cold start are known, goes deeper into market design and governance.
+  - Topic 9 — credit Rumelt (diagnosis–guiding policy–coherent action); the strategic argument itself, not presentation craft (that's Product Communication).
+- Deliberate spaced repetition across topics: bets/assumptions thread (topics 6, 7, 10 — echoing intermediate "Making a bet you can defend"), pricing thread (3 → 5 → 8), partner/ecosystem thread (2 → 6 → 8), S-curve/expansion thread (4 → 11).
+
+### Expert — ✅ Complete (2026-06-10)
+
+11 topics × 8 lessons = 88 lessons. In `lesson_config.py`. (Topic 3 is a bonus topic added during sequence design.)
 
 Through-line: *you are accountable for product strategy at the company level — where product bets and business strategy are the same thing.*
 
 1. When product strategy is company strategy
 2. Portfolio strategy — managing multiple bets across a product portfolio
-3. Strategic acquisitions — what to buy, what to avoid, and why
-4. Platform strategy at scale — building an ecosystem others build on
-5. Communicating strategy to a board — what they're actually asking
+3. Business model transformation — changing how your product makes money *(bonus topic)*
+4. Strategic acquisitions — what to buy, what to avoid, and why
+5. Platform strategy at scale — building an ecosystem others build on
 6. Competitor intelligence at scale — building a strategic radar
-7. When to kill a product line — the signals and the decision
-8. Strategy in regulated markets — constraints as a strategic lens
-9. International product strategy — sequencing and localisation
-10. The 10-year vision — what it is, what it isn't, and how to set one
+7. Strategy in regulated markets — constraints as a strategic lens
+8. International product strategy — sequencing and localisation
+9. When to kill a product line — the signals and the decision
+10. Communicating strategy to a board — what they're actually asking
+11. The 10-year vision — what it is, what it isn't, and how to set one
+
+Topic 11 is the capstone of the entire track — it ties vision (beginner), bets under uncertainty (intermediate), and long-range planning (advanced) together at company scale. Treat it as special.
+
+**Changes made during sequence design:**
+- Bonus topic added — "Business model transformation": the level's own through-line says product bets and business strategy are the same thing, yet nothing covered changing how the product makes money (perpetual→subscription, seats→usage). Advanced topic 3 covers repricing *within* a model; this covers changing the machine itself, including the revenue trough and customer migration.
+- Topics reordered from the original proposal so the level reads as an arc: frame-setter first (topic 1), money and structural moves together (2–5), outward-facing strategy (6–8), then the endings — kill decision, board, vision (9–11). The 10-year vision moved to last as the track capstone.
+- `through_line` added to nine topics to carve boundaries against neighbouring content:
+  - Topic 1 — level frame-setter; capital allocation and P&L lens, not roadmaps.
+  - Topic 2 — allocation across bets; the deep kill decision is topic 9; AI portfolio management stays in the AI track.
+  - Topic 3 — builds on advanced pricing: repricing changes the number, transformation changes the machine.
+  - Topic 4 — acquisition as strategy instrument (the thesis); M&A execution role stays in Leadership & Influence, technical due diligence in Technical Skills.
+  - Topic 5 — the owner's side of advanced ecosystem + two-sided market topics; assumes both.
+  - Topic 7 — regulation as strategy variable; AI-specific compliance stays in the AI track.
+  - Topic 8 — market selection, sequencing, operating model; launch execution stays in Go-to-Market.
+  - Topic 9 — builds on advanced mature-product topic; company-level line decision with divestiture as the live alternative.
+  - Topic 10 — what boards are actually asking (fiduciary lens); presentation craft stays in Product Communication; builds on the advanced strategic narrative topic.
+- ⚠️ **Cross-track duplicate to resolve:** Leadership & Influence Expert (flat list) contains "10-year product vision setting", which duplicates topic 11 here. Remove or reframe it (e.g. toward the leadership/alignment side of vision) when that track is reviewed.
 
 ---
 
@@ -708,12 +743,17 @@ Through-line: *you can get things done, build trust, and start to influence the 
 2. Board-level product communication
 3. Product considerations in M&A
 4. Building a product org from scratch
-5. Product strategy at company scale
-6. Investor relations for product leaders
+5. Building strategic capability in your product org — making strategy everyone's job
+6. Investor relations for product leaders ⚠️ *Also proposed in Stakeholder Management Expert (topic 3) — decide which track owns it when either is reviewed*
 7. Creating a product-led growth culture
 8. Succession planning in product leadership
-9. 10-year product vision setting
+9. Leading with a 10-year vision — keeping the organisation aligned and believing
 10. Operating as the senior-most product person
+
+**Cross-track duplicates resolved 2026-06-10** (after Product Strategy Expert was sequenced):
+- Topic 5 renamed: was "Product strategy at company scale" — duplicated Product Strategy Expert topic 1 ("When product strategy is company strategy"). Reframed to the leadership lens: PS covers *what the strategy is* at company level; this covers building the org's strategic capability — developing strategic thinkers, delegating strategy, making it everyone's job.
+- Topic 9 renamed: was "10-year product vision setting" — duplicated Product Strategy Expert topic 11 ("The 10-year vision — what it is, what it isn't, and how to set one"). Reframed to the leadership lens: PS covers *setting* the vision; this covers *leading with it* — sustaining belief through setbacks, keeping a growing organisation aligned, evangelising it over years.
+- Note: topic 2 ("Board-level product communication") is deliberately **not** a duplicate of Product Strategy Expert topic 10 — that topic's `through_line` already carves the boundary: PS covers what boards are actually asking about strategy (the fiduciary lens); this covers board communication craft and the relationship more broadly.
 
 ---
 
@@ -781,7 +821,7 @@ Through-line: *you manage boards, investors, and the most senior stakeholders in
 
 1. Managing your board of directors as a product leader
 2. The CEO relationship — how to make it work and what breaks it
-3. Investor relations for product leaders
+3. Investor relations for product leaders ⚠️ *Also in Leadership & Influence Expert (topic 6) — decide which track owns it when either is reviewed*
 4. Building exec alignment on a multi-year product vision
 5. Stakeholder management across an acquisition or merger
 6. Managing activist or difficult board members
@@ -942,7 +982,7 @@ Through-line: *you communicate as a company voice and an industry voice — inte
 
 ---
 
-## Track 9: Product Design & UX for PMs
+## Track 10: Product Design & UX for PMs
 
 **Status:** ⚪ Not started — new track, does not exist yet
 
@@ -1007,7 +1047,7 @@ Through-line: *you shape design strategy and influence how design works across y
 
 ---
 
-## Track 10: Technical Skills for PMs
+## Track 11: Technical Skills for PMs
 
 **Status:** ⚪ Not started — new track, does not exist yet
 

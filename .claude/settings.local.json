@@ -158,7 +158,13 @@
       "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(d.get\\('prisma', 'NOT FOUND'\\)\\)\")",
       "Bash(npx tsx *)",
       "Bash(pnpm tsx *)",
-      "Bash(grep -v 'Use \\\\`node')"
+      "Bash(grep -v 'Use \\\\`node')",
+      "Bash(rm /Users/guypowell/Documents/Projects/learning/prisma/generated-lessons.json)",
+      "Bash(grep -n '^    {$\\\\|^    },$\\\\|^        \"name\":' scripts/lesson_config.py)",
+      "Bash(python3 -)"
+    ],
+    "additionalDirectories": [
+      "/Users/guypowell/Documents/Projects/learning/prisma"
     ]
   }
 }
