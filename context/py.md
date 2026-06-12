@@ -93,6 +93,14 @@ learning-ai/
 
 ---
 
+## Lesson Generation Scripts (learning monorepo, not learning-ai)
+
+The active Python surface is `learning/scripts/`: `lesson_config.py` (curriculum source of truth), `generate-lessons.py` (Claude Batch API), `generate-lessons-local.py` (Ollama fallback — stale, do not extend). The `learning-ai` FastAPI service documented above is **archived** — realtime generation was abandoned for offline batch.
+
+**Planned work (2026-06-11, not started)**: `docs/persistent-ids-lessons.md` in learning-project specs persistent IDs (`trackId`/`levelId`/`topicId`/`lessonNumber`) threaded through `lesson_config.py` and `generate-lessons.py`, plus two new scripts (`backfill-lesson-ids.py`, `repair-orphan-lessons.py`). Read that spec before touching any generation script — it includes a root-cause fix (stamp lesson metadata from the batch manifest, never trust model JSON output for known fields) and a mandatory sort-by-(topicId, lessonIndex) before writing JSON.
+
+---
+
 ## Change Log
 
 | Date | What | Why |

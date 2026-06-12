@@ -14,7 +14,23 @@ Generates all Ascent micro-lessons and loads them into the database.
 | AI for Product Managers | expert | 88 | ✅ Sequences written — ready to generate |
 | All other tracks (8 tracks) | various | ~230 | ⚪ Not yet generated — deferred until AI track validated |
 
-**Database:** Not yet seeded. Run `pnpm --filter api prisma:seed` to load the beginner lessons.
+**Database:** Not yet seeded. Run `pnpm --filter api prisma:seed` to load the beginner lessons. **This may be out of date**
+
+## Mandatary track order
+
+| Track number | Track name | Premium |
+|---|---|---|
+| 1 | Product Strategy | Y
+| 2 | Discovery & Research | Y
+| 3 | Execution & Delivery | N
+| 4 | Metrics & Analytics | N
+| 5 | Leadership & Influence | Y
+| 6 | Stakeholder Management | N
+| 7 | Go-to-Market & Launch | Y
+| 8 | Product Communication | N
+| 9 | AI for Product Managers | Y
+| 10 | Product Design & UX for PMs | Y
+| 11 | Technical Skills for PMs | Y
 
 ---
 

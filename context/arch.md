@@ -306,6 +306,10 @@ last_updated: 2026-04-12
 
 ## Change Log
 
+**2026-06-12** — Arch review: 003-fix-lesson-ids (not-required)
+- Mechanical rename `Lesson.day` → `Lesson.lessonNumber` — no structural change, no ADR needed
+- Noted: API response shape change is breaking for un-updated consumers (mobile scoped as follow-up)
+
 **2026-06-08** — Phase 11: Security, Analytics & Observability (11.1, 11.3, 11.4 complete; 11.2 deferred)
 - JWT auth upgraded: 15m access tokens + 30d refresh tokens stored hashed in Redis
 - New routes: `POST /api/auth/refresh`, `POST /api/auth/logout`

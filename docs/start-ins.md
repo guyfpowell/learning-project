@@ -10,6 +10,9 @@
 
 ## Essential Commands
 
+Start:
+cd /Users/guypowell/Documents/Projects/learning && pnpm dev
+
 Build:
 cd /Users/guypowell/Documents/Projects/learning && pnpm build
 
@@ -20,9 +23,14 @@ Web:
 cd /Users/guypowell/Documents/Projects/learning/packages/web && pnpm start
 
 Setup & run dev:
-```bash
-cd /Users/guypowell/Documents/Projects/learning && pnpm install && docker-compose up -d && pnpm db:push && pnpm db:seed && pnpm dev
-```
+Step 1 — First-time setup:
+cd /Users/guypowell/Documents/Projects/learning && pnpm install && docker-compose up -d && pnpm db:migrate
+
+Step 2 — Seed the database:
+cd /Users/guypowell/Documents/Projects/learning/packages/api && npx tsx ../../prisma/seed.ts
+
+Step 3 — Start dev servers:
+cd /Users/guypowell/Documents/Projects/learning && pnpm dev
 
 Run tests:
 ```bash

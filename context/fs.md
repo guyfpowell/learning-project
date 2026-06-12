@@ -1,6 +1,6 @@
 ---
 title: FS Agent Context — Learning App
-last_updated: 2026-06-09
+last_updated: 2026-06-11
 ---
 
 # Learning App — Full Stack Context
@@ -448,6 +448,51 @@ Content generation is offline batch, not realtime. Scripts live in `learning/scr
 ---
 
 ## Change Log
+
+**2026-06-11** — PERSISTENT LESSON IDS FULLY IMPLEMENTED (persistent-ids-lessons.md — status: complete, all 8 chunks done)
+
+Full self-contained spec at `docs/persistent-ids-lessons.md`. Read it before any seed/schema/generation work — it supersedes parts of `lesson-ordering.md` and the seed notes in `lesson-presntation.md`.
+
+Key facts established during investigation (true as of 2026-06-11, pre-implementation):
+- **Seed breaks enrollment**: `skill.deleteMany()` regenerates all cuids every run → `UserProfile.goal` (stores Skill cuid) goes stale, `UserProgress` cascade-deleted. Fix = idempotent upserts keyed on new stable `trackId`.
+- **generated-lessons.json lessons are in ALPHABETICAL topic order, not curriculum order** — batch pipeline assembled results unsorted; seed assigned `lessonNumber` from array position, so tracks started with the wrong lesson. Correct order lives only in `scripts/lesson_config.py`. Fixed in persistent-ids ticket.
+- **3 orphan lessons** (title/summary/content only — no quiz/metadata) at array position 0 of PS-beginner, PS-intermediate, AI-advanced; they got served as lessonNumber 1 with no quiz. Root cause: generation script trusted model JSON instead of stamping manifest metadata.
+- ID scheme: `trackId` (1–11 canonical, permanent, ≠ display `order`), `levelId` (beginner=1…expert=4), `topicId` (config position), `lessonNumber` (contiguous per track+level — **this is the DB column, renamed from `day`**), plus existing `lessonIndex` (1–8 in topic). Addresses: `9.1.2` ≡ `9.1.1.2`.
+- Premium: config holds initial default only; seed sets on **create only**; runtime toggle via new `PATCH /api/admin/skills/:id` (in spec).
+- `SubscriptionPlan.name` is unique (upsertable); nothing references Quiz IDs (quizzes safe to replace on re-seed).
+
+**2026-06-11** — LESSON PRESENTATION FIELDS (lesson-presntation.md)
+
+6 fields from `generated-lessons.json` that were previously discarded at seed time are now persisted and shown in the UI: `summary`, `keyTakeaway`, `topicName`, `isCapstone`, `lessonIndex`, `totalLessons`.
+
+Migration: `20260611133025_add_lesson_presentation_fields`. All fields optional — backward-compatible with any hand-crafted lessons.
+
+Seed cleanup: removed 3 hand-crafted placeholder lessons ("What is Product Strategy?", "Understanding Your Users", "Setting Strategic Goals") and their empty skill path stub. All lesson content now comes from `generated-lessons.json` (672 lessons across 8 skill paths).
+
+Lesson page now shows: title → **summary** (italic) → content → Complete → **keyTakeaway** (branded callout) → Take Quiz.
+
+**2026-06-11** — TRACK ORDERING (lesson-ordering.md)
+
+Schema: `order Int @default(0)` added to `Skill` model.
+
+Migrations: Project now uses `prisma migrate dev` (not `db:push`). New scripts: `db:migrate` (dev), `db:migrate:prod` (deploy). `prisma migrate dev` requires a TTY — cannot be run from scripts; must be run in a real terminal.
+
+`db:seed` script: Fixed — now calls `tsx` directly instead of proxying through `prisma db seed` (which swallowed all output). `pnpm db:seed` now works correctly.
+
+Seed robustness: Three data-quality guards added for lessons with missing fields in older generated JSON:
+- `l.quiz` — `Array.isArray` guard; lessons with no quiz are created without one
+- `l.durationMinutes` — falls back to `5`
+- `l.difficulty` — falls back to `pathData.level`
+
+`seed.ts`: `TRACK_ORDER` fallback map (tracks 1–11); `order` in skill upsert.
+
+`lesson_config.py`: `"order"` field on all 9 current tracks.
+
+`generate-lessons.py`: `order` threaded through batch manifest, batch results, sync structured mode, sync flat mode.
+
+`GET /api/lessons/skills`: Now sorts by `orderBy: { order: 'asc' }` (was `name`).
+
+Known issue: 5 legacy placeholder skills (Prompt Engineering, User Research, AI Fundamentals, Product Metrics, Retrieval Augmented Generation) have `order: 0` and no lesson content — they sort before real tracks. Should be removed from `seed.ts` or given `order: 99`.
 
 **2026-06-09** — FREEMIUM TRACK ACCESS (all chunks complete)
 
