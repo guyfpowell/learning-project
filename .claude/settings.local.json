@@ -204,7 +204,20 @@
       "Bash(python3 -m py_compile backfill-lesson-ids.py)",
       "Bash(PGPASSWORD=learning_password psql -h localhost -p 5433 -U learning_user -d learning_app -c \"SELECT column_name FROM information_schema.columns WHERE table_name = 'lessons' AND column_name IN \\('day', 'lesson_number', 'lessonNumber'\\);\")",
       "Bash(pnpm --filter web test)",
-      "Bash(PGPASSWORD=learning_password psql -h localhost -p 5433 -U learning_user -d learning_app -c \"SELECT \\\\\"lessonIndex\\\\\", \\\\\"totalLessons\\\\\", \\\\\"lessonNumber\\\\\" FROM lessons LIMIT 10;\")"
+      "Bash(PGPASSWORD=learning_password psql -h localhost -p 5433 -U learning_user -d learning_app -c \"SELECT \\\\\"lessonIndex\\\\\", \\\\\"totalLessons\\\\\", \\\\\"lessonNumber\\\\\" FROM lessons LIMIT 10;\")",
+      "Bash(awk '/\"name\": \"Discovery & Research\"/{print NR}' /Users/guypowell/Documents/Projects/learning/scripts/lesson_config.py)",
+      "Bash(awk 'NR>=474 && NR<=700' /Users/guypowell/Documents/Projects/learning-project/docs/reqs/lesson-build.md)",
+      "Bash(awk -F: '$1 > 1806 && $1 < 2397')",
+      "Bash(awk -F: '$1 > 2395 && $1 < 3000')",
+      "Bash(grep -E '^\\\\s*\"name\":\\\\s*\"[^\"]*\",$')",
+      "Bash(python3 -c \"import sys; sys.path.insert\\(0, '/Users/guypowell/Documents/Projects/learning/scripts'\\); from lesson_config import TRACKS; print\\('Track names:'\\); [print\\(f'  - {t[\\\\\"name\\\\\"]}'\\) for t in TRACKS]\")",
+      "Bash(awk -F: '$1>29885')",
+      "Bash(python3 -m json.tool prisma/generated-lessons.json)",
+      "Bash(awk 'NR>=29887 && NR<=29920 && /\"lessonIndex\"|\"lessonNumber\"|\"title\"|\"topicId\"/ {print NR\": \"$0}' prisma/generated-lessons.json)",
+      "Bash(awk 'NR>=29888 && NR<=30870 && \\(/\"title\":/ || /\"lessonNumber\":/ || /\"track\":/ || /\"level\":/\\) {print NR\": \"$0}' prisma/generated-lessons.json)",
+      "Bash(awk 'NR>=29888 && NR<=30870 && \\(/\"title\":/ || /\"lessonNumber\":/ || /\"track\":/ || /\"level\":/\\) {print NR\": \"$0}' /Users/guypowell/Documents/Projects/learning/prisma/generated-lessons.json)",
+      "Bash(awk 'NR>=29800 && NR<=30890 && /\"lessonNumber\":/ {gsub\\(/[^0-9]/,\"\"\\); printf \"%s \", $0}' prisma/generated-lessons.json)",
+      "Bash(awk 'NR>=29200 && NR<=30888 && /\"lessonNumber\":/ {gsub\\(/[^0-9]/,\"\"\\); print}' prisma/generated-lessons.json)"
     ],
     "additionalDirectories": [
       "/Users/guypowell/Documents/Projects/learning/prisma",

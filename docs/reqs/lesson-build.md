@@ -4,33 +4,35 @@ Generates all Ascent micro-lessons and loads them into the database.
 
 ---
 
-## Current Status — 2026-06-09
+## Current Status — 2026-06-12
 
 | Track | Level | Lessons | Status |
 |---|---|---|---|
-| AI for Product Managers | beginner | 80 | ✅ Generated — in `prisma/generated-lessons.json` |
-| AI for Product Managers | intermediate | 80 | ✅ Sequences written — ready to generate |
-| AI for Product Managers | advanced | 88 | ✅ Sequences written — ready to generate (11 topics, includes multimodal bonus) |
-| AI for Product Managers | expert | 88 | ✅ Sequences written — ready to generate |
-| All other tracks (8 tracks) | various | ~230 | ⚪ Not yet generated — deferred until AI track validated |
+| AI for Product Managers | all 4 levels | 336 | ✅ Generated — in `prisma/generated-lessons.json` |
+| Product Strategy | all 4 levels | 336 | ✅ Generated — in `prisma/generated-lessons.json` |
+| Discovery & Research | all 4 levels | 320 | 🟡 Sequenced in `lesson_config.py` (2026-06-12), not generated |
+| Execution & Delivery | all 4 levels | 320 | 🟡 Sequenced in `lesson_config.py` (2026-06-12), not generated |
+| Metrics & Analytics | all 4 levels | 320 | 🟡 Sequenced in `lesson_config.py` (2026-06-12), not generated |
+| Leadership & Influence | all 4 levels | 320 | 🟡 Sequenced in `lesson_config.py` (2026-06-12), not generated |
+| All other tracks (5 tracks) | various | — | ⚪ Not sequenced or generated — see `docs/product-consultant.md` for order and progress |
 
 **Database:** Not yet seeded. Run `pnpm --filter api prisma:seed` to load the beginner lessons. **This may be out of date**
 
 ## Mandatary track order
 
-| Track number | Track name | Premium |
-|---|---|---|
-| 1 | Product Strategy | Y
-| 2 | Discovery & Research | Y
-| 3 | Execution & Delivery | N
-| 4 | Metrics & Analytics | N
-| 5 | Leadership & Influence | Y
-| 6 | Stakeholder Management | N
-| 7 | Go-to-Market & Launch | Y
-| 8 | Product Communication | N
-| 9 | AI for Product Managers | Y
-| 10 | Product Design & UX for PMs | Y
-| 11 | Technical Skills for PMs | Y
+| Track number | Track name  |
+|---|---|
+| 1 | Product Strategy | 
+| 2 | Discovery & Research | 
+| 3 | Execution & Delivery | 
+| 4 | Metrics & Analytics | 
+| 5 | Leadership & Influence | 
+| 6 | Stakeholder Management | 
+| 7 | Go-to-Market & Launch | 
+| 8 | Product Communication | 
+| 9 | AI for Product Managers | 
+| 10 | Product Design & UX for PMs | 
+| 11 | Technical Skills for PMs | 
 
 ---
 
@@ -359,10 +361,10 @@ When starting a new track:
 | # | Track | Status |
 |---|---|---|
 | 1 | Product Strategy | ✅ All four levels sequenced — ready to generate |
-| 2 | Discovery & Research | ⚪ Not started |
-| 3 | Execution & Delivery | ⚪ Not started |
-| 4 | Metrics & Analytics | ⚪ Not started |
-| 5 | Leadership & Influence | ⚪ Not started |
+| 2 | Discovery & Research | ✅ All four levels sequenced (2026-06-12) — ready to generate |
+| 3 | Execution & Delivery | ✅ All four levels sequenced (2026-06-12) — ready to generate |
+| 4 | Metrics & Analytics | ✅ All four levels sequenced (2026-06-12) — ready to generate |
+| 5 | Leadership & Influence | ✅ All four levels sequenced (2026-06-12) — ready to generate |
 | 6 | Stakeholder Management | ⚪ Not started |
 | 7 | Go-to-Market & Launch | ⚪ Not started |
 | 8 | Product Communication | ⚪ Not started |
@@ -474,48 +476,96 @@ Topic 11 is the capstone of the entire track — it ties vision (beginner), bets
 
 ## Track 2: Discovery & Research
 
-**Status:** ⚪ Not started — topics exist in flat format, sequences not designed
+**Status:** ✅ All four levels sequenced and in `lesson_config.py` (2026-06-12) — not yet generated
 
 **Category:** `product-management`
 
 **Description:** Find real problems before you build.
 
+**`isPremium`:** out of scope for sequencing — the user sets premium status via the admin interface later. Don't flag config/doc mismatches.
+
 ### Level structure
 
 | Level | Who it's for | Status |
 |---|---|---|
-| Beginner | PMs running their first research or interviews | ⚪ Topics exist, needs structured sequences |
-| Intermediate | PMs building a continuous discovery practice | ⚪ Topics exist, needs structured sequences |
-| Advanced | Senior PMs and research leads running complex studies | ⚪ Topics exist, needs structured sequences |
-| Expert | Directors and VPs building a research practice at org scale | ⚪ Missing — needs topics and sequences |
+| Beginner | PMs running their first research or interviews | ✅ Sequences written — in `lesson_config.py` (2026-06-12) |
+| Intermediate | PMs building a continuous discovery practice | ✅ Sequences written — in `lesson_config.py` (2026-06-12) |
+| Advanced | Senior PMs and research leads running complex studies | ✅ Sequences written — in `lesson_config.py` (2026-06-12) |
+| Expert | Directors and VPs building a research practice at org scale | ✅ Sequences written — in `lesson_config.py` (2026-06-12) |
 
-### Beginner — current topics (flat format, needs structured sequences)
+### Beginner — ✅ Complete (2026-06-12)
+
+10 topics × 8 lessons = 80 lessons. In `lesson_config.py`.
 
 1. Why discovery matters before building
-2. How to recruit research participants
-3. Writing a good discussion guide
-4. Running your first user interview
-5. Surveys vs interviews — when to use each
-6. Affinity mapping your research notes
-7. Spotting and avoiding confirmation bias
-8. What jobs to be done interviews reveal ⚠️ *Slightly advanced for beginner — fine to keep but sequence carefully*
-9. Mapping assumptions before building
+2. Mapping assumptions before building
+3. Surveys vs interviews — when to use each
+4. How to recruit research participants
+5. Writing a good discussion guide
+6. Running your first user interview
+7. Listening for the job to be done
+8. Spotting and avoiding confirmation bias
+9. Affinity mapping your research notes
 10. Synthesising findings into insights
 
-### Intermediate — current topics (flat format, needs structured sequences)
+Level arc: why discovery → name your guesses → pick the method → find the people → write the guide → run the interview → hear the job → guard against bias → organise the notes → turn it into insight.
+
+**Changes made during sequence design:**
+- Reordered: "Mapping assumptions before building" moved from 9th to 2nd — it was sequenced after synthesis, but assumption mapping is how you decide *what to research*; it must precede method choice, recruiting, and interviewing. Original order failed the prerequisite-arc test.
+- Reordered: "Surveys vs interviews" moved from 5th to 3rd — method choice follows directly from the research question (topic 2's output) and must precede recruiting.
+- Renamed and repositioned: "What jobs to be done interviews reveal" → "Listening for the job to be done", placed 7th (resolves the ⚠️ "slightly advanced" flag). Framed as a beginner *listening lens* — Christensen's "progress people are trying to make", milkshake story, everyday analogies — immediately after "Running your first user interview" so it deepens a skill just learned. The `through_line` defers the full JTBD/outcomes framework upward; the strategy lens lives in Product Strategy intermediate ("Jobs to be done as a strategy lens").
+- "Spotting and avoiding confirmation bias" placed 8th as the deliberate bridge between the asking topics (5–7) and the sense-making topics (9–10) — bias enters both.
+- No topics cut, none added — all ten earn their place; held at 10 per the format standard.
+- `through_line` added to all 10 topics. Key boundary decisions:
+  - Topic 1 — credit Marty Cagan (value risk); finding problems is this track, strategic direction is Product Strategy.
+  - Topic 2 — output is a research question; experiment design beyond interviews/surveys stays in intermediate (DFV checks).
+  - Topic 3 — survey craft kept basic; statistical rigour is advanced, usability methods are intermediate.
+  - Topic 5 — credit Rob Fitzpatrick's The Mom Test ("would you use this?" trap; past behaviour beats hypothetical opinion).
+  - Topic 6 — stays in the room; contextual inquiry is intermediate.
+  - Topic 9 — repositories/scaling stay in intermediate.
+  - Topic 10 — level capstone; presentation craft defers to Product Communication, org-scale insight activation defers to advanced ("Insight activation — making research stick").
+- Deliberate spaced repetition across topics: assumptions thread (topic 2 → topic 10 lesson 4 "Back to your assumption map" → capstone), bias thread (topic 4 convenience trap → topic 8 → topic 9 "instead of forcing them"), past-behaviour/Mom Test thread (topic 5 lesson 3 → topic 7 lesson 5 "Asking about the last time").
+
+### Intermediate — ✅ Complete (2026-06-12)
+
+10 topics × 8 lessons = 80 lessons. In `lesson_config.py`.
 
 1. Continuous discovery habits
 2. Opportunity solution trees
-3. Contextual inquiry in the field
-4. Usability testing methods compared
-5. Desirability, feasibility, and viability checks
-6. Card sorting and tree testing
-7. Quantitative vs qualitative research trade-offs
-8. Diary studies for longitudinal insight
-9. Problem framing and reframing techniques
+3. Problem framing and reframing techniques
+4. Quantitative vs qualitative research trade-offs
+5. Contextual inquiry in the field
+6. Diary studies for longitudinal insight
+7. Usability testing methods compared
+8. Card sorting and tree testing
+9. Desirability, feasibility, and viability checks
 10. Building a lightweight research repository
 
-### Advanced — current topics (flat format, needs structured sequences)
+Level arc: build the habit → structure the learning (tree) → frame the problem → choose your evidence → watch the work → follow it over time → test usability → test findability → test the whole bet → make it compound. Level through-line: *beginner taught you to run one good study; intermediate turns research from a project into a weekly operating habit.*
+
+**Changes made during sequence design:**
+- All 10 placeholder topics kept — none cut, added, or renamed — but four were reordered (prerequisite-arc failures):
+  - "Problem framing and reframing techniques" moved 9th → 3rd — framing must precede method work and solution testing; at 9th it arrived after everything it should shape (same failure mode as beginner's assumption-mapping reorder).
+  - "Quantitative vs qualitative research trade-offs" moved 7th → 4th — it's the evidence-choosing judgement topics 5–9 depend on, so it precedes the individual methods.
+  - Methods grouped generative-before-evaluative: contextual inquiry (5) and diary studies (6) before usability testing (7) and card sorting/tree testing (8).
+  - "Desirability, feasibility, and viability checks" moved 5th → 9th — it tests *solutions*, so it needs the tree (topic 2) and the evaluative methods behind it; at 5th it taught solution testing before any evaluative method existed.
+- Card sorting/tree testing considered for cutting (narrowest topic) but kept: findability problems are common, the methods are cheap and remote-friendly, and the `through_line` keeps it a research method (IA craft deferred to Track 10).
+- `through_line` added to all 10 topics. Key boundary decisions:
+  - Topic 1 — credit Teresa Torres; scaling habits across teams defers to advanced (democratising research).
+  - Topic 2 — Torres's opportunity solution tree; roadmap prioritisation defers to Execution & Delivery, outcome-metric setting to Metrics & Analytics.
+  - Topic 3 — customer-problem level only; strategic diagnosis (Rumelt) stays in Product Strategy.
+  - Topic 4 — behavioural data as discovery input in scope; instrumentation/metric craft defers to Metrics & Analytics, statistical rigour and formal mixed-methods to advanced.
+  - Topic 5 — credit Beyer & Holtzblatt (master-apprentice stance); full ethnography defers to advanced.
+  - Topic 6 — lightweight team-level studies; org-scale longitudinal programmes defer to expert.
+  - Topic 7 — credit Jakob Nielsen (five users, think-aloud); design craft/heuristics defer to Track 10 (Product Design & UX), research ops to advanced.
+  - Topic 8 — research method only; information architecture craft defers to Track 10.
+  - Topic 9 — credit Marty Cagan's risk framing (echoes beginner topic 1's "four risks"); deep feasibility defers to Execution & Delivery, full business cases to Product Strategy. Resumes the beginner assumption-mapping thread — solutions are stacks of guesses too.
+  - Topic 10 — level capstone; research ops, democratisation, and insight activation defer to advanced.
+- Spaced-repetition threads: opportunity tree (topic 2 → topic 3 lesson 7 → topic 9 lessons 1/8 → topic 10 lesson 6); assumption mapping from beginner (topic 9 lessons 1/3); bias from beginner (topic 4 cherry-picking, topic 5 say-vs-do, topic 7 leading tasks); weekly cadence (topic 1 → topic 7 small rounds → topic 10 capture habit); Mom Test/past behaviour (topic 1 lesson 6 story-based interviews).
+
+### Advanced — ✅ Complete (2026-06-12)
+
+10 topics × 8 lessons = 80 lessons. In `lesson_config.py`.
 
 1. Mixed-methods research design
 2. Survey validity and statistical rigour
@@ -525,251 +575,471 @@ Topic 11 is the capstone of the entire track — it ties vision (beginner), bets
 6. Democratising research across teams
 7. Measuring the ROI of discovery
 8. Rapid synthesis under time pressure
-9. When to skip discovery ⚠️ *Sharpen to "When speed trumps discovery — making the call and living with it"*
+9. When speed trumps discovery — making the call and living with it
 10. Insight activation — making research stick
 
-### Expert — missing, proposed topics
+Level arc: design rigour (1–4: formal study design, quant rigour, deep qual, org-scale synthesis) → scale machinery (5–6: ops, democratisation) → judgement and impact (7–10: ROI, speed, skipping, activation). Level through-line: *intermediate made discovery a weekly habit; advanced makes it rigorous, scalable, and consequential.*
 
-Through-line: *you are building a research capability across an organisation, not just running studies.*
+**Changes made during sequence design:**
+- All 10 placeholder topics kept; order already passed the prerequisite-arc test, so no reorders.
+- Renamed: "When to skip discovery" → "When speed trumps discovery — making the call and living with it" (resolves the ⚠️ watch-list flag). Framed around reversibility (one-way vs two-way doors), cost of delay, and instrumenting what you skipped so the market becomes the study — the honest counterweight to the track, not a licence to skip.
+- "Insight activation" confirmed as the level capstone — pays off the promise made in beginner topic 10 and intermediate topic 10; org-strategy wiring deferred to expert.
+- `through_line` added to all 10 topics. Key boundary decisions:
+  - Topic 1 — owns study architecture; statistical detail deferred to topic 2.
+  - Topic 2 — survey rigour only; experiment statistics (A/B significance) belong to Metrics & Analytics.
+  - Topic 3 — pragmatic product ethnography, not academic anthropology; the promised step beyond intermediate contextual inquiry.
+  - Topic 4 — evidence-led synthesis; workshop facilitation and visual craft defer to Track 10, journey metric instrumentation to Metrics & Analytics.
+  - Topic 5 — credit Kate Towsey (ResearchOps); ops serves researchers, democratisation (topic 6) serves non-researchers.
+  - Topic 7 — value = risk avoided + decisions changed; full financial modelling defers to Product Strategy; argument returns at expert scale.
+  - Topic 10 — presentation craft defers to Product Communication.
+- Spaced-repetition threads: confirmation bias from beginner returns in topic 8 ("bias at speed") and topic 2 (reading results honestly); the four-risks/risk-reduction frame from beginner topic 1 returns in topic 9 lesson 2; ops governance (topic 5) sets up expert ethics-at-scale; topic 6 builds directly on topic 5.
+
+### Expert — ✅ Complete (2026-06-12)
+
+10 topics × 8 lessons = 80 lessons. In `lesson_config.py`.
 
 1. Building a research practice from scratch
-2. Research strategy — what to study and what to skip
-3. Scaling discovery across multiple product teams
-4. The research-to-strategy link — making research move the business
-5. Research partnerships and external agencies
+2. Designing the research operating model — centralised, embedded, or hybrid
+3. Research strategy — deciding what the organisation learns
+4. Research partnerships and external agencies
+5. Longitudinal research programmes — what they are and when to invest
 6. Building organisational research literacy
-7. When research says one thing and business says another
-8. Longitudinal research programmes — what they are and when to invest
-9. Communicating research to boards and executives
-10. Research ethics at scale — responsibilities as your reach grows
+7. Communicating research to boards and executives
+8. When research says one thing and the business says another
+9. Research ethics at scale — responsibilities as your reach grows
+10. The research-to-strategy engine — making evidence move the company's biggest bets
+
+Level arc: build it → structure it → aim it → extend it → invest long → raise the org → the top of the org → the hard moments → the responsibility → the payoff. Level through-line: *you own the capability, not the studies — peer-to-peer with VPs and CPOs about headcount, budgets, and boards.*
+
+**Changes made during sequence design (vs proposed topic list):**
+- Reframed: "Scaling discovery across multiple product teams" → "Designing the research operating model — centralised, embedded, or hybrid". Advanced topic 6 already owns democratisation mechanics; the genuinely VP-level question is org design — reporting lines, intake, researcher careers, migrating models as the company changes.
+- Moved and elevated: "The research-to-strategy link" 4th → 10th, renamed "The research-to-strategy engine — making evidence move the company's biggest bets" — the capstone of the whole track per the format standard, tying beginner's first interview through to evidence shaping bets, portfolio reviews, and the three-year view.
+- Sharpened: "Research strategy — what to study and what to skip" → "Research strategy — deciding what the organisation learns", framed as capital allocation of learning capacity — deliberately mirroring the Product Strategy expert lens (strategy allocates money, research strategy allocates learning).
+- Remaining seven topics kept with reordering into the build → aim → extend → raise → defend → payoff arc above.
+- `through_line` added to all 10 topics. Key boundary decisions:
+  - Topic 4 — make-vs-buy logic from Product Strategy applied to learning capacity; core continuous discovery is never outsourced; procurement mechanics out of scope.
+  - Topic 5 — pays off the promise from intermediate diary studies (org-scale longitudinal programmes).
+  - Topic 6 — distinct from advanced democratisation: that taught teams to *do* research, this teaches the org to *consume* evidence well.
+  - Topic 7 — carved against Product Strategy expert's board topic (fiduciary lens shared, but this is customer evidence at board altitude); presentation craft defers to Product Communication.
+  - Topic 8 — the business sometimes should win; the craft is separating motivated reasoning from legitimate judgement on both sides.
+  - Topic 9 — institutional responsibility beyond per-study consent (covered in advanced ops): power asymmetries, AI on research data, refusing dark-pattern requests.
+- Spaced-repetition threads: capital-allocation lens (topic 3 → topic 10 portfolio review); longitudinal asset (topic 5 → topic 10 lesson 6 "the long view"); advanced ROI argument returns at company scale (topic 1 sceptical CFO, topic 3); credibility/trust thread (topic 1 credibility account → topic 7 standing slot → topic 8 losing well).
 
 ---
 
 ## Track 3: Execution & Delivery
 
-**Status:** ⚪ Not started — topics exist in flat format, sequences not designed
+**Status:** ✅ All four levels sequenced and in `lesson_config.py` (2026-06-12) — 40 topics, 320 lessons. Not yet generated.
 
 **Category:** `product-management`
 
 **Description:** Roadmaps, prioritisation, shipping under pressure.
 
+*Sequenced in a single pass (all four levels, user-directed, skipping per-level review) on 2026-06-12.*
+
 ### Level structure
 
 | Level | Who it's for | Status |
 |---|---|---|
-| Beginner | PMs learning to run a team and ship features | ⚪ Topics exist, needs structured sequences |
-| Intermediate | PMs managing complexity, debt, and cross-functional delivery | ⚪ Topics exist, needs structured sequences |
-| Advanced | Senior PMs and leads managing delivery at programme scale | ⚪ Topics exist, needs structured sequences |
-| Expert | Directors and VPs accountable for delivery culture and org-level output | ⚪ Missing — needs topics and sequences |
+| Beginner | PMs learning to run a team and ship features | ✅ Sequences written — in `lesson_config.py` (2026-06-12) |
+| Intermediate | PMs managing complexity, debt, and cross-functional delivery | ✅ Sequences written — in `lesson_config.py` (2026-06-12) |
+| Advanced | Senior PMs and leads managing delivery at programme scale | ✅ Sequences written — in `lesson_config.py` (2026-06-12) |
+| Expert | Directors and VPs accountable for delivery culture and org-level output | ✅ Sequences written — in `lesson_config.py` (2026-06-12) |
 
-### Beginner — current topics (flat format, needs structured sequences)
+### Beginner — ✅ Complete (2026-06-12)
+
+10 topics × 8 lessons = 80 lessons. In `lesson_config.py`.
 
 1. What makes a good product roadmap
-2. Roadmap formats and when to use them
-3. Now-next-later planning
+2. Choosing a roadmap format — timelines, now-next-later, and when each fits
+3. Your first prioritisation framework — RICE, value vs effort, and what the scores hide
 4. Writing clear user stories
 5. Acceptance criteria that engineers trust
 6. Working effectively with engineers
 7. Sprint planning for PMs
-8. Managing dependencies between teams
-9. Definition of done
+8. Definition of done — making 'done' mean done
+9. Managing dependencies between teams
 10. Running a useful retrospective
 
-### Intermediate — current topics (flat format, needs structured sequences)
+Level arc: plan (1–3: roadmap, format, prioritisation) → break it down (4–5: stories, criteria) → run the team (6–8: engineers, sprints, done) → beyond the team (9: dependencies) → improve (10: retros, the level capstone).
 
-1. RICE prioritisation scoring ⚠️ *Consider whether this is beginner-level — RICE is widely taught at entry level*
-2. Opportunity scoring frameworks
-3. Ruthless prioritisation under constraints
-4. Technical debt — when to say yes
-5. Feature flags and phased rollouts
-6. Incident management for PMs
-7. Scope creep and how to handle it
+**Changes made during sequence design:**
+- Merged: "Roadmap formats and when to use them" + "Now-next-later planning" → "Choosing a roadmap format — timelines, now-next-later, and when each fits". Two beginner topics on roadmap formats was redundant — now-next-later *is* a format (credited to Janna Bastow), taught as the beginner default within one format-choice topic.
+- Moved down from intermediate: RICE → new topic 3 "Your first prioritisation framework — RICE, value vs effort, and what the scores hide" (resolves the ⚠️ flag — RICE is entry-level craft, and Product Strategy beginner's `through_line` explicitly defers execution frameworks to this track). Framed as: frameworks structure the argument, they don't make the decision.
+- Reordered: "Definition of done" moved 9th → 8th (it's within-team sprint craft, paired with acceptance criteria via an explicit cross-reference lesson); "Managing dependencies between teams" moved 8th → 9th (the step beyond a single team, setting up the advanced dependency topic).
+- Renamed: "Definition of done" → "Definition of done — making 'done' mean done".
+- `through_line` added to all 10 topics. Key boundary decisions:
+  - Topic 1 — roadmap building only; the strategy-vs-roadmap distinction stays in Product Strategy beginner; stakeholder negotiation defers to Stakeholder Management.
+  - Topic 3 — the strategic *why* of prioritisation stays in Product Strategy beginner ("Prioritisation as a strategic skill"); sharper tools (cost of delay) are intermediate.
+  - Topic 4 — credit the Connextra format and INVEST; PRD craft defers to Product Communication.
+  - Topic 6 — day-to-day collaboration only; deep trust-building with engineering leads defers to Leadership & Influence; technical fluency to Technical Skills for PMs.
+  - Topic 10 — credit Norm Kerth's prime directive; the level capstone; org-scale post-mortem culture defers to expert.
+- Spaced-repetition threads: roadmap-as-intent (topic 1 → topic 2 format switching → topic 7 sprint goal); acceptance criteria ↔ definition of done (topic 5 lesson 7 and topic 8 lesson 1 cross-reference each other); the estimate conversation (topic 6 lesson 5) seeds the intermediate estimation topic; dependencies (topic 9) seeds the advanced scale topic.
+
+### Intermediate — ✅ Complete (2026-06-12)
+
+10 topics × 8 lessons = 80 lessons. In `lesson_config.py`.
+
+1. Cost of delay and opportunity scoring — prioritising with time in the equation
+2. Ruthless prioritisation under constraints
+3. Estimation and forecasting — giving dates without lying
+4. Scope creep and how to handle it
+5. Technical debt — when to say yes
+6. Feature flags and phased rollouts
+7. Incident management for PMs
 8. Cross-functional team dynamics
 9. Working in a platform or infra team
 10. Delivering with distributed teams
 
-### Advanced — current topics (flat format, needs structured sequences)
+Level arc: sharper prioritisation (1–2: tools, judgement) → commitments (3–4: dates, scope) → the recurring claims on capacity (5: debt) → shipping safely (6–7: rollouts, incidents) → the team system (8) → the special contexts (9–10). Level through-line: *beginner taught you to run one team's delivery in calm conditions; intermediate keeps you shipping when reality pushes back.*
+
+**Changes made during sequence design:**
+- RICE moved down to beginner (see above), freeing a slot.
+- Merged: "Opportunity scoring frameworks" absorbed into topic 1 "Cost of delay and opportunity scoring — prioritising with time in the equation" — opportunity scoring alone was too thin for 8 lessons; combined with cost of delay and WSJF (credit Don Reinertsen) it forms the natural "beyond RICE" toolkit, adding the dimension RICE ignores: time.
+- New topic added: "Estimation and forecasting — giving dates without lying" — nothing in the placeholder list (or the whole curriculum) covered the question PMs get asked most: *when will it be done?* Story points, velocity-based forecasting, ranges over dates, and re-forecasting without drama.
+- Topic 10 ("Delivering with distributed teams") confirmed as the level capstone — every practice in the level stretched across time zones.
+- `through_line` added to all 10 topics. Key boundary decisions:
+  - Topic 1 — outcome-metric definition defers to Metrics & Analytics; choosing discovery opportunities defers to D&R (opportunity solution trees).
+  - Topic 2 — the craft of delivering the no defers to Stakeholder Management; the strategy that makes the no defensible echoes Product Strategy beginner.
+  - Topic 5 — credit Martin Fowler's deliberate-vs-reckless quadrant. Carved against Track 11: Technical Skills owns *understanding* what debt is; this track owns the *prioritisation call*. Scales up at advanced (technical investment).
+  - Topic 6 — delivery mechanics only; launch comms and GTM tiers defer to Go-to-Market; AI rollouts (shadow mode) stay in the AI track.
+  - Topic 7 — the PM supports response, doesn't command it; incident command belongs to engineering, crisis stakeholder comms to Stakeholder Management, org-scale post-mortem culture to expert.
+  - Topic 8 — the operating system of the trio; deep interpersonal craft defers to Leadership & Influence.
+  - Topic 9 — internal-platform delivery reality; platform *business strategy* (two-sided markets) stays in Product Strategy.
+  - Topic 10 — day-to-day distributed delivery; org-level site strategy belongs to expert org design.
+- Spaced-repetition threads: prioritisation (beginner RICE → topics 1–2 → scope trades in topic 4); estimation (beginner "estimate conversation" → topic 3 → re-forecasting in topic 4 lesson 7); debt (topic 5 → flag debt in topic 6 lesson 7 → incident debt in topic 7 lesson 6); blameless review (topic 7 lesson 7 echoes beginner retros, seeds expert post-mortem culture).
+
+### Advanced — ✅ Complete (2026-06-12)
+
+10 topics × 8 lessons = 80 lessons. In `lesson_config.py`.
 
 1. OKRs for product teams
-2. Portfolio-level prioritisation
-3. Programme management across squads
-4. Dependency management at scale
-5. Quarterly planning at a growing company
-6. Technical strategy for non-engineers
+2. Quarterly planning at a growing company
+3. Portfolio-level prioritisation
+4. Programme management across squads
+5. Dependency management at scale
+6. Scaling agile beyond a single scrum team
 7. Org design and its impact on delivery
-8. Delivery risk identification and mitigation
-9. Scaling agile beyond a single scrum team
-10. Build vs buy at the portfolio level
+8. Technical investment as a product decision — platforms, debt, and capacity
+9. Build vs buy at the portfolio level
+10. Delivery risk identification and mitigation
 
-### Expert — missing, proposed topics
+Level arc: alignment machinery (1–3: goals, cadence, allocation) → running big things (4–6: programmes, dependencies, scaled process) → the structures underneath (7–9: org, technical investment, build-vs-buy economics) → risk across all of it (10, the level capstone). Level through-line: *intermediate kept one team shipping under pressure; advanced makes many teams ship in the same direction.*
 
-Through-line: *you are accountable for how the whole organisation ships — culture, structure, and pace.*
+**Changes made during sequence design:**
+- Reframed: "Technical strategy for non-engineers" → "Technical investment as a product decision — platforms, debt, and capacity". The placeholder collided head-on with Track 11 (Technical Skills for PMs), whose entire purpose is technical fluency. What this track genuinely owns is the *investment decision* — how much delivery capacity goes to platforms, debt, and engineering health, and how to defend the allocation. Scales the intermediate debt topic from one sprint to a portfolio stance.
+- Reordered four topics for the prerequisite arc: "Quarterly planning" moved 5th → 2nd (the cadence that operationalises OKRs, needed before portfolio allocation); "Scaling agile" moved 9th → 6th (process machinery belongs with programmes/dependencies, before the org-design topic it previews); "Technical investment" 6th → 8th (after org design, before build-vs-buy which extends it); "Delivery risk" moved 8th → 10th as the level capstone — pre-mortems (credit Gary Klein) synthesise programmes, dependencies, planning, and technical investment.
+- `through_line` added to all 10 topics. Key boundary decisions:
+  - Topic 1 — credit Grove and Doerr; builds on Product Strategy beginner goal-craft; metric definition and instrumentation defer to Metrics & Analytics; failure modes (theatre, sandbagging) get equal billing.
+  - Topic 3 — delivery allocation only; company-level portfolio strategy (core/adjacent/transformational) stays in Product Strategy expert.
+  - Topic 6 — sceptical of framework maximalism; SAFe/LeSS as options to adapt, not religions to install.
+  - Topic 7 — credit Skelton & Pais (team topologies) and Conway's law. **The advanced/expert carve:** advanced *diagnoses* structure and influences it; expert *decides* and executes reorgs. People-leadership stays in Leadership & Influence.
+  - Topic 9 — Product Strategy advanced owns the strategic make-vs-buy lens and explicitly defers the delivery economics here: TCO, integration tax, capability drain, portfolio audit.
+- Spaced-repetition threads: dependencies (beginner topic 9 → topic 5 → structural answer previews topic 7); allocation (topic 3 → topic 8 → topic 9); the bottleneck platform team (topic 5 lesson 5 echoes intermediate topic 9); pre-mortem (topic 10) mirrors the expert post-mortem topic from the other side.
+
+### Expert — ✅ Complete (2026-06-12)
+
+10 topics × 8 lessons = 80 lessons. In `lesson_config.py`.
+
+Through-line: *you are accountable for how the whole organisation ships — culture, structure, pace, and the system that produces delivery, not the deliveries themselves.*
 
 1. Delivery at company scale — what changes when you have 50 teams
 2. Building a delivery culture — what it is and how to create it
-3. Shipping when you can't fail — high-stakes delivery leadership
-4. Org design choices and their delivery consequences
-5. Managing delivery across geographies and time zones
-6. The CPO delivery agenda — what you own at the top
+3. Org design choices and their delivery consequences
+4. Measuring delivery at scale — flow, DORA, and the Goodhart trap
+5. Shipping when you can't fail — high-stakes delivery leadership
+6. Leading through a major platform migration
 7. When to slow down to go faster — the counter-intuitive call
-8. Leading through a major platform migration
-9. Post-mortem culture at scale — learning from failure as an org
-10. Delivery in a public company — the constraints you haven't faced yet
+8. Post-mortem culture at scale — learning from failure as an org
+9. Delivery in a public company — the constraints you haven't faced yet
+10. The CPO delivery agenda — owning how the company ships
+
+Level arc: the scale frame (1) → culture (2) → structure (3) → measurement (4) → the hard moments (5–7: can't-fail, migration, the deliberate pause) → learning (8) → the top-floor constraints (9) → the agenda (10).
+
+Topic 10 is the capstone of the entire track — from a beginner's first roadmap to owning the system that turns strategy into shipped product. Treat it as special.
+
+**Changes made during sequence design (vs proposed topic list):**
+- Cut: "Managing delivery across geographies and time zones" — duplicated intermediate topic 10 ("Delivering with distributed teams"); the genuinely expert-level remainder (site strategy, what to co-locate) was folded into topic 3 (org design, lesson 4).
+- New topic added in its place: "Measuring delivery at scale — flow, DORA, and the Goodhart trap" — the proposed level owned culture and structure but had no measurement layer. Credit DORA (Nicole Forsgren, *Accelerate*) and flow metrics; the org dynamics of measuring engineers (Goodhart's law, never weaponising) are the expert content. Carved against Metrics & Analytics: that track owns product metrics; this owns measuring the machine that ships.
+- Moved and elevated: "The CPO delivery agenda" 6th → 10th as the track capstone — operating rhythm, allocation stance, delivery brand, personal standard, succession test.
+- Reordered: org design moved 4th → 3rd (structure directly follows culture, before measurement); remaining topics sequenced into the arc above.
+- `through_line` added to all 10 topics. Key boundary decisions:
+  - Topic 2 — specifically the culture of *shipping*; broad product-culture building stays in Leadership & Influence.
+  - Topic 3 — the deciding altitude (advanced diagnoses, expert decides — the carve recorded in the advanced notes); absorbs site strategy; hiring mechanics stay in Leadership & Influence.
+  - Topic 5 — assurance and delivery leadership; launch communications stay in Go-to-Market.
+  - Topic 6 — the leadership problem of re-platforming; technical mechanics stay in Technical Skills for PMs; builds on advanced technical investment and build-vs-buy.
+  - Topic 8 — credit John Allspaw and the blameless SRE tradition; scales beginner retros and intermediate incident reviews; AI-failure post-mortems stay in the AI track.
+  - Topic 9 — delivering inside public-company constraints; investor communication itself stays in Leadership & Influence / Stakeholder Management.
+  - Topic 10 — building the product org (hiring, careers) stays in Leadership & Influence ("Building a product org from scratch").
+- Spaced-repetition threads: finishing-over-starting (topic 2 → WIP/smaller portfolio in topic 7 lesson 5); debt and technical investment from lower levels return in topics 6 and 7; the learning loop (beginner retros → intermediate blameless review → topic 8); the delivery-brand/credibility thread (topic 4 honest measurement → topic 9 disclosure discipline → topic 10 lesson 5).
 
 ---
 
 ## Track 4: Metrics & Analytics
 
-**Status:** ⚪ Not started — beginner level missing entirely, existing levels in flat format
+**Status:** ✅ All four levels sequenced and in `lesson_config.py` (2026-06-12) — 40 topics, 320 lessons. Not yet generated.
 
 **Category:** `product-management`
 
 **Description:** Instrument, measure, and read the signal.
 
+*Sequenced in a single pass (all four levels, user-directed, skipping per-level review) on 2026-06-12.*
+
 ### Level structure
 
 | Level | Who it's for | Status |
 |---|---|---|
-| Beginner | PMs with limited data experience who need a foundation | ⚪ Missing — needs topics and sequences |
-| Intermediate | PMs who can read data and need to run experiments | ⚪ Topics exist, needs structured sequences |
-| Advanced | Senior PMs who own measurement strategy | ⚪ Topics exist, needs structured sequences |
-| Expert | Directors and VPs building data culture and measurement strategy | ⚪ Missing — needs topics and sequences |
+| Beginner | PMs with limited data experience who need a foundation | ✅ Sequences written — in `lesson_config.py` (2026-06-12) |
+| Intermediate | PMs who can read data and need to define, instrument, and experiment | ✅ Sequences written — in `lesson_config.py` (2026-06-12) |
+| Advanced | Senior PMs who own measurement architecture, economics, and causality | ✅ Sequences written — in `lesson_config.py` (2026-06-12) |
+| Expert | Directors and VPs building measurement culture and data strategy | ✅ Sequences written — in `lesson_config.py` (2026-06-12) |
 
-**Note:** Beginner is the most urgent gap in the entire curriculum — understanding what a metric is, reading a dashboard, avoiding vanity metrics — these are day-one PM skills with no entry point in the current content.
+### Beginner — ✅ Complete (2026-06-12)
 
-### Beginner — missing, proposed topics
-
-Through-line: *you understand what metrics are, why they matter, and how to use them to make better decisions.*
+10 topics × 8 lessons = 80 lessons. In `lesson_config.py`.
 
 1. Why metrics matter — the PM's relationship with data
 2. What makes a good metric
-3. Leading vs lagging indicators
-4. Understanding your funnel
-5. Reading a dashboard without a data analyst
-6. Vanity metrics vs actionable metrics
-7. Common metric mistakes PMs make
-8. Your first north star metric
+3. Vanity metrics vs actionable metrics
+4. Leading vs lagging indicators
+5. Understanding your funnel
+6. Reading a dashboard without a data analyst
+7. Averages, percentages, and segments — reading numbers without being fooled
+8. How metrics fit together — from your feature to the company's goals
 9. When the numbers are wrong — data quality basics
 10. Asking better questions of your data
 
-### Intermediate — current topics (flat format, needs structured sequences)
+Level arc: why measure → what good looks like → spot the fakes → the time dimension → the first structure (funnel) → read the dashboard → read the numbers honestly → see the connections → trust but verify → turn reading into asking. Level through-line: *you can read, question, and act on product data without a data analyst at your elbow.*
+
+**Changes made during sequence design:**
+- Reframed: "Common metric mistakes PMs make" → "Averages, percentages, and segments — reading numbers without being fooled". The placeholder was a listicle, not a skill; the genuine day-one gap is basic data literacy — averages hide extremes, percentages need denominators, totals hide segments. The useful "mistakes" survive inside it (small-sample swings, mix shifts).
+- Reframed: "Your first north star metric" → "How metrics fit together — from your feature to the company's goals". Choosing a north star duplicated intermediate topic 1; what a beginner actually needs is the metric *chain* — feature → product → company. Introduces the north star idea (lesson 5) and defers choosing one to intermediate; also plants the seed for the advanced metric-tree topic. Deliberate three-level arc: beginner sees the connections, intermediate chooses the north star, advanced decomposes it.
+- Reordered: "Vanity metrics vs actionable metrics" moved 6th → 3rd — it's the direct payoff of "What makes a good metric" (the behaviour test with teeth) and must precede the funnel/dashboard topics it inoculates.
+- `through_line` added to all 10 topics. Key boundary decisions: topic 1 carves the track against D&R (research finds problems; this track measures what happens once you ship); topic 3 credits Eric Ries; topic 5 credits Dave McClure (AARRR) and defers funnel diagnosis to intermediate; topic 9 defers instrumentation craft to intermediate; topic 10 (level capstone) defers experimentation to intermediate and presentation to Product Communication.
+- Spaced-repetition threads: denominators (topic 5 lesson 6 ↔ topic 7 lesson 3); rates-over-counts (topic 2 lesson 3 → topic 3 lesson 6); data-informs-judgement-decides (topic 1 lesson 5 → topic 10, and onward to the advanced/expert culture topics); seasonality (topic 6 lesson 5 → topic 9 sniff tests).
+
+### Intermediate — ✅ Complete (2026-06-12)
+
+10 topics × 8 lessons = 80 lessons. In `lesson_config.py`.
 
 1. North star metrics — choosing one that matters
-2. HEART framework for UX measurement
-3. Defining activation and retention metrics
-4. Funnel analysis and where users drop off
-5. Cohort analysis for retention
-6. A/B testing fundamentals
-7. Statistical significance explained for PMs
-8. Instrumentation and event tracking
+2. Defining activation and retention metrics
+3. HEART framework for UX measurement
+4. Instrumentation and event tracking
+5. Funnel analysis and where users drop off
+6. Cohort analysis for retention
+7. A/B testing fundamentals
+8. Statistical significance explained for PMs
 9. Building dashboards teams actually use
 10. Avoiding metric gaming
 
-### Advanced — current topics (flat format, needs structured sequences)
+Level arc: define what matters (1–3: north star, activation/retention, HEART) → instrument it (4) → analyse it (5–6: funnels, cohorts) → experiment on it (7–8) → operationalise it (9) → defend it (10, the level capstone). Level through-line: *beginner taught you to read data; intermediate makes you the team's measurement owner — define, instrument, experiment.*
 
-1. Causal inference vs correlation in product data
-2. Multi-armed bandit experiments
-3. Novelty effects and how they skew results
-4. Guardrail metrics and sensitive reaction groups
-5. LTV, CAC, and payback period
-6. Engagement quality vs raw engagement
-7. Measuring network effects
-8. Metric trees and decomposition
-9. Ecosystem-level measurement
+**Changes made during sequence design:**
+- All 10 placeholder topics kept — none cut or added — but the order failed the prerequisite-arc test in two places:
+  - "Instrumentation and event tracking" moved 8th → 4th — you can't run funnels, cohorts, or A/B tests on events you never tracked; instrumentation must precede every analysis topic. (Same failure mode as D&R beginner's assumption-mapping reorder.)
+  - "Defining activation and retention metrics" moved 3rd → 2nd and HEART 2nd → 3rd — activation/retention extend the north star directly; HEART is the broader definition toolkit.
+- `through_line` added to all 10 topics. Key boundary decisions:
+  - Topic 1 — credit Sean Ellis and John Cutler/Amplitude; a north star measures value delivered, not activity; OKR machinery stays in E&D advanced. Builds on beginner topic 8.
+  - Topic 3 — credit Google's Kerry Rodden (HEART, goals-signals-metrics); usability methods stay in D&R, design craft in Track 10.
+  - Topic 4 — **the instrumentation carve honoured:** this track owns tracking craft; D&R intermediate topic 4 owns behavioural data as a discovery input (carved 2026-06-12). Stack tooling decisions defer to expert.
+  - Topic 7 — **the experiment-statistics carve honoured:** D&R advanced topic 2 explicitly defers A/B statistics here. Guardrail metrics seeded in the capstone (paid off at advanced topic 5).
+  - Topic 8 — survey statistics stay in D&R advanced; deeper causal inference is this track's advanced level.
+  - Topic 9 — operational dashboards only; data storytelling and presentation craft defer to Product Communication.
+  - Topic 10 — level capstone; Goodhart's law at product altitude. Carved against E&D expert topic 4: that track owns Goodhart for *delivery* metrics (measuring the machine that ships); this owns *product* metrics and team incentives. Seeds the expert measurement-culture topic.
+- Spaced-repetition threads: aha moment (topic 2 → topic 6 behavioural cohorts → topic 7 hypotheses); peeking (topic 7 lesson 6 → topic 8 lesson 6); beginner funnel returns as diagnosis (topic 5); beginner dashboard-reading returns as dashboard-making (topic 9); honest numbers (topic 8 "significant but tiny" → topic 10 capstone).
+
+### Advanced — ✅ Complete (2026-06-12)
+
+10 topics × 8 lessons = 80 lessons. In `lesson_config.py`.
+
+1. Metric trees and decomposition
+2. Engagement quality vs raw engagement
+3. LTV, CAC, and payback period
+4. Causal inference vs correlation in product data
+5. Guardrail metrics — protecting what you're not trying to move
+6. Why experiments lie — novelty, seasonality, and results that don't last
+7. Beyond A/B — measuring impact when you can't run a clean test
+8. Measuring network effects
+9. Ecosystem-level measurement — portfolios, platforms, and cross-product value
 10. Data-informed vs data-driven culture
 
-### Expert — missing, proposed topics
+Level arc: architecture (1: the tree) → what the numbers mean (2–3: quality, economics) → causality and experiment rigour (4–7: inference, guardrails, result-scepticism, the un-A/B-testable) → measurement at the frontier (8–9: networks, ecosystems) → the judgement layer (10, the level capstone). Level through-line: *intermediate made you the team's measurement owner; advanced makes you the architect — economics, causality, and measurement where experiments can't reach.*
 
-Through-line: *you are building a measurement culture and a data strategy across the organisation.*
+**Changes made during sequence design:**
+- Renamed and broadened: "Multi-armed bandit experiments" → "Beyond A/B — measuring impact when you can't run a clean test". Bandits alone are too narrow for 8 lessons; the genuinely senior skill is the full toolkit for the un-A/B-testable — bandits, switchbacks, difference-in-differences, synthetic controls — and matching tool to constraint.
+- Renamed and broadened: "Novelty effects and how they skew results" → "Why experiments lie — novelty, seasonality, and results that don't last". Novelty is one of several result-skewers; the topic now covers change aversion, seasonality, sample pollution, winner's curse, and long-running holdouts.
+- Renamed: "Guardrail metrics and sensitive reaction groups" → "Guardrail metrics — protecting what you're not trying to move" ("sensitive reaction groups" was opaque; the segment lens survives as lesson 5).
+- Renamed for scope: "Ecosystem-level measurement" → "Ecosystem-level measurement — portfolios, platforms, and cross-product value", and carved against topic 8: network effects measures the *effects*, ecosystem measures the *multi-product portfolio* (cannibalisation, bundles, platform health).
+- Reordered into the arc above: "Metric trees and decomposition" moved 8th → 1st (the structural tool the level hangs off; pays off beginner topic 8 and intermediate north star inputs); engagement quality and LTV/CAC moved up together (6th → 2nd, 5th → 3rd); experiment-rigour topics grouped 4–7 in design→reading→workaround order (guardrails before result-reading, since guardrails are designed in advance); "Data-informed vs data-driven culture" held at 10 as the level capstone.
+- `through_line` added to all 10 topics. Key boundary decisions: topic 1 defers OKR cascading to E&D advanced; topic 3 credits David Skok, defers pricing to Product Strategy and channels to GTM; topic 8 carves against Product Strategy intermediate (strategy owns the claim, this owns the instruments); topic 9 defers platform business strategy to Product Strategy; topic 10 defers qualitative evidence craft to D&R and seeds the expert level.
+- Spaced-repetition threads: cohort curves (intermediate topic 6 → LTV in topic 3); vanity-metrics instinct from beginner returns at altitude (topic 2); guardrails seeded in intermediate topic 7 capstone get their full topic (5); power-user trap (topic 4) echoes the cohort comparisons; the overrule discipline (topic 10) seeds expert topics 1 and 9.
+
+### Expert — ✅ Complete (2026-06-12)
+
+10 topics × 8 lessons = 80 lessons. In `lesson_config.py`.
 
 1. Building a measurement culture — what it takes and why most companies fail
 2. The data team relationship — how to get what you need as a product leader
-3. Experimentation at scale — when to run fewer, better tests
-4. Metric strategy — what your company chooses to measure and why
-5. Communicating data to boards and executives
-6. When data and intuition conflict — making the call
+3. The analytics stack — what a VP of Product actually needs to understand
+4. Building self-serve analytics — the org capability you need
+5. Metric governance — one source of truth in a company full of numbers
+6. Experimentation at scale — when to run fewer, better tests
 7. Privacy-preserving measurement — the constraints ahead
-8. The analytics stack — what a VP of Product needs to understand
-9. Building self-serve analytics — the org capability you need
-10. Measurement for AI features — the expert view
+8. Communicating data to boards and executives
+9. When data and intuition conflict — making the call
+10. The metric strategy — deciding what the company measures and why
+
+Level arc: culture (1) → partnership (2) → machinery (3) → capability (4) → governance (5) → programme (6) → constraints (7) → the top of the org (8) → the hard call (9) → the strategy (10). Level through-line: *you own how the company measures — the culture, the capability, and the strategy of what gets measured at all; peer-to-peer with CPOs, CFOs, and boards.*
+
+Topic 10 is the capstone of the entire track — from a beginner reading a dashboard to deciding what the company pays attention to at all. Treat it as special.
+
+**Changes made during sequence design (vs proposed topic list):**
+- Cut: "Measurement for AI features — the expert view" — collides with the AI track (frozen and generated), which owns AI measurement end-to-end: success metrics (intermediate 7), eval sets (advanced 6), LLM-as-judge (advanced 7), observability (advanced 8). An expert AI-measurement topic here would duplicate, not deepen.
+- New topic in its place: "Metric governance — one source of truth in a company full of numbers" — the proposed level had culture and tooling but nothing on the 'two dashboards, two revenue numbers' problem: definition ownership, certified metrics, change control, deprecation. A real VP-level capability nothing else in the curriculum covers, and the necessary partner to self-serve.
+- Moved and elevated: "Metric strategy — what your company chooses to measure and why" 4th → 10th, renamed "The metric strategy — deciding what the company measures and why" — the track capstone per the format standard. Framed as attention allocation, deliberately mirroring Product Strategy expert (capital allocation) and D&R expert (learning allocation).
+- Reordered the rest into the arc above: analytics stack 8th → 3rd and self-serve 9th → 4th (machinery before governance and programme); data-vs-intuition 6th → 9th (the judgement topic belongs late, after the machinery it overrules).
+- `through_line` added to all 10 topics. Key boundary decisions:
+  - Topic 1 — scales the advanced data-informed capstone from team to org; broad product culture stays in Leadership & Influence, shipping culture in E&D.
+  - Topic 2 — the data function specifically; the research-team relationship belongs to D&R expert.
+  - Topic 3 — fluency, not engineering; deep technical mechanics stay in Technical Skills for PMs.
+  - Topic 4 — democratising data the way D&R advanced democratised research; pairs with topic 5 (freedom needs rules).
+  - Topic 6 — programme/portfolio altitude only; test mechanics live at intermediate/advanced; AI evals stay in the AI track.
+  - Topic 7 — institutional responsibility, echoing D&R expert research ethics; legal mechanics belong to counsel, AI-regulation specifics to the AI track.
+  - Topic 8 — carved against three neighbours: Product Strategy expert owns the board *strategy* conversation, D&R expert owns *customer evidence* at board altitude, Product Communication owns presentation craft — this owns the company's *numbers*: which, how framed, how defended.
+  - Topic 9 — carved against D&R expert topic 8 ("research says one thing, business says another" — qualitative evidence vs business pressure); this is quantitative data vs leader conviction. Decision quality vs outcome quality; the overrule on the record.
+- Spaced-repetition threads: honest-numbers thread completes (intermediate gaming → expert topic 1 "celebrating honest misses" → topic 8 "presenting bad numbers"); the overrule discipline (advanced topic 10 → topic 9 protocol and track record); governance (topic 5) underpins boards (topic 8 "consistency compounds"); the metric chain that opened the track at beginner closes as company strategy (topic 10).
 
 ---
 
 ## Track 5: Leadership & Influence
 
-**Status:** ⚪ Not started — beginner level missing, existing levels in flat format
+**Status:** ✅ All four levels sequenced and in `lesson_config.py` (2026-06-12) — 40 topics, 320 lessons. Not yet generated.
 
 **Category:** `product-management`
 
 **Description:** Stakeholders, narrative, and the path to Director+.
 
+*Sequenced in a single pass (all four levels, user-directed, skipping per-level review) on 2026-06-12.*
+
+**The track's defining carve (decided 2026-06-12): L&I vs Stakeholder Management.** SM owns the stakeholder *system* — identifying, mapping, engagement plans, cadences, review meetings, coalitions, and the relationships with external governance (board, investors, CEO). L&I owns the *personal craft* of influence and leadership — persuasion, negotiation, trust, feedback, leading teams, growing people, culture, org building, and the career path itself. Every cut and reframe below follows from this carve.
+
 ### Level structure
 
 | Level | Who it's for | Status |
 |---|---|---|
-| Beginner | PMs in their first 1–2 years learning to influence without authority | ⚪ Missing — needs topics and sequences |
-| Intermediate | Mid-level PMs building credibility and managing up | ⚪ Topics exist, needs structured sequences |
-| Advanced | Senior PMs moving into lead or director roles | ⚪ Topics exist, needs structured sequences |
-| Expert | VPs and CPOs leading product organisations | ⚪ Topics exist, needs structured sequences |
+| Beginner | PMs in their first 1–2 years learning to influence without authority | ✅ Sequences written — in `lesson_config.py` (2026-06-12) |
+| Intermediate | Mid-level PMs moving decisions, managing up, and holding teams together | ✅ Sequences written — in `lesson_config.py` (2026-06-12) |
+| Advanced | Senior PMs moving into lead or director roles — the shift from doing to leading | ✅ Sequences written — in `lesson_config.py` (2026-06-12) |
+| Expert | VPs and CPOs leading the product organisation itself | ✅ Sequences written — in `lesson_config.py` (2026-06-12) |
 
-### Beginner — missing, proposed topics
+### Beginner — ✅ Complete (2026-06-12)
 
-Through-line: *you can get things done, build trust, and start to influence the people and decisions around you.*
+10 topics × 8 lessons = 80 lessons. In `lesson_config.py`.
 
 1. Why PMs need influence without authority
 2. Understanding what motivates different people at work
-3. How to get things done without a title
+3. Reading the room — emotional intelligence basics for PMs
 4. Building trusted relationships in your first year
-5. Disagreeing without damaging the relationship
-6. Reading the room — emotional intelligence basics for PMs
+5. The currencies of influence — getting things done without a title
+6. Disagreeing without damaging the relationship
 7. When to push back and when to let it go
 8. Getting credit for your work without making enemies
 9. The PM's relationship with their manager
 10. Your first 90 days — building influence from zero
 
-### Intermediate — current topics (flat format, needs structured sequences)
+Level arc: the frame (why influence) → see others (motivation) → see the moment (EQ) → the foundation (trust) → the tactics (currencies) → the hard moments (disagreement, battle-picking) → visibility (credit) → the key relationship (your manager) → the synthesis window (first 90 days). Level through-line: *you can get things done, build trust, and start to influence the people and decisions around you.*
 
-1. Influencing without authority
-2. Stakeholder mapping and prioritisation
-3. Writing persuasive product documents
-4. Running effective product reviews
+**Changes made during sequence design (vs proposed topic list):**
+- Reordered: "Reading the room — EQ basics" moved 6th → 3rd — EQ is a prerequisite for handling disagreement (proposed 5th), not a follow-up to it. Seeing people (topic 2) and seeing the moment (topic 3) must both precede the trust, tactics, and conflict topics.
+- Renamed: "How to get things done without a title" → "The currencies of influence — getting things done without a title", and positioned 5th after trust — the exchange toolkit (credit Cohen & Bradford) only works once you know what people value (topic 2) and they trust you (topic 4). Topic 1 keeps the why/mindset; this owns the tactics.
+- "Your first 90 days" confirmed as the level capstone (credit Michael Watkins) — applies every foundation to the highest-leverage window a PM gets.
+- `through_line` added to all 10 topics. Key boundary decisions: topic 1 carves the track against Stakeholder Management (SM owns stakeholder identification mechanics; this track owns the personal skill of moving people); topic 4 credits Maister's trust equation and defers eng-lead depth to intermediate; topic 7 defers the formal stakeholder "no" to SM; topic 9 keeps the beginner altitude (your own boss) and defers exec sponsors to intermediate.
+- Spaced-repetition threads: the scoreboard (topic 2 → topic 5 lesson 5 → topic 9 lesson 6); disagree-and-commit (topic 6 lesson 7 → topic 7 lesson 4); the trust account (topic 4 → topic 5 lesson 7 → topic 10 lesson 5); pushing back upward (topic 7 lesson 5 → topic 9 lesson 7).
+
+### Intermediate — ✅ Complete (2026-06-12)
+
+10 topics × 8 lessons = 80 lessons. In `lesson_config.py`.
+
+1. Influencing decisions you don't own
+2. Making the case — building arguments that change minds
+3. Negotiation for PMs — getting to yes without burning the relationship
+4. Facilitating decisions — running the room so things actually get decided
 5. Giving and receiving feedback well
-6. Managing up to your exec sponsors
-7. Leading through ambiguity
-8. Building trust with engineering leads
-9. Handling disagreement in cross-functional teams
-10. Understanding the PM career ladder ⚠️ *Slightly out of place here — consider moving to a career track if one is added*
+6. Building trust with engineering leads
+7. Managing up to your exec sponsors
+8. Handling conflict in cross-functional teams
+9. Leading through ambiguity
+10. Growing toward senior PM — turning influence into career progress
 
-### Advanced — current topics (flat format, needs structured sequences)
+Level arc: the persuasion core (1–4: decisions, arguments, negotiation, facilitation) → relationship maintenance (5: feedback) → the two key relationships (6–7: eng lead, exec sponsors) → the hard moments (8–9: conflict, ambiguity) → the payoff (10, the level capstone). Level through-line: *beginner gave you the personal foundations; intermediate makes you the PM who moves decisions, manages upward, and holds a team together under tension.*
 
-1. Executive communication — what changes at director level
-2. Mentoring and growing junior PMs
+**Changes made during sequence design (vs flat topic list):**
+- Cut: "Stakeholder mapping and prioritisation" — core Stakeholder Management territory (SM beginner "Who are your stakeholders", SM intermediate "Building a stakeholder engagement plan"). Replaced with a genuine curriculum gap: **"Negotiation for PMs — getting to yes without burning the relationship"** (credit Fisher & Ury) — PMs negotiate scope, dates, and resources weekly and nothing in the curriculum taught it.
+- Reframed: "Influencing without authority" → "Influencing decisions you don't own" — the flat title duplicated beginner topic 1; the intermediate step up is moving decisions made above and around you (real decision-makers, option framing, pre-wiring).
+- Reframed: "Writing persuasive product documents" → "Making the case — building arguments that change minds" — Product Communication owns writing and presentation craft; L&I owns the argument architecture itself, whatever the medium.
+- Reframed: "Running effective product reviews" → "Facilitating decisions — running the room so things actually get decided" — SM beginner already owns "Running a product review meeting"; the influence skill L&I genuinely owns is group decision facilitation (decision modes, drawing out quiet voices, landing the commit).
+- Resolved the ⚠️ career-ladder flag by reframing, not cutting: "Understanding the PM career ladder" → "Growing toward senior PM — turning influence into career progress", elevated to level capstone. The track's tagline is literally "the path to Director+" — career progression is the track's promise, reframed from HR-ladder tour to influence campaign (sponsors vs mentors, visible stretch, the promotion case as a case to be made). The IC-vs-manager fork is advanced; succession is expert — a deliberate career thread runs the whole track.
+- "Managing up to your exec sponsors" kept with a carve: L&I owns the personal relationship craft; SM advanced's proposed "The executive sponsor relationship" must take the governance/engagement lens or be folded when Track 6 is sequenced (flagged in the watch-list).
+- "Building trust with engineering leads" kept per the 2026-06-12 carve — E&D beginner stays day-to-day, this goes deep; technical fluency defers to Track 11.
+- "Handling disagreement in cross-functional teams" sharpened to "Handling conflict…" — E&D intermediate's team-dynamics topic explicitly defers the interpersonal craft here.
+- Spaced-repetition threads: negotiation interests reappear in conflict mediation (topic 8 lesson 4); the beginner scoreboard thread continues (topic 6 lesson 6, topic 7 lesson 6); borrowed authority from beginner returns as sponsor-capital judgement (topic 7 lesson 4); sponsors-not-mentors (topic 10 lesson 4) seeds the advanced sponsorship lesson.
+
+### Advanced — ✅ Complete (2026-06-12)
+
+10 topics × 8 lessons = 80 lessons. In `lesson_config.py`.
+
+1. Moving from IC to manager — the hardest transition in product
+2. Managing a team of PMs
 3. Creating psychological safety in product teams
-4. Navigating organisational politics
-5. Strategic storytelling for product leaders
+4. Mentoring and growing junior PMs
+5. Hiring and structuring PM interviews
 6. Building a product culture
-7. Hiring and structuring PM interviews
-8. Managing a team of PMs
-9. Product leadership during a company downturn
-10. Moving from IC to manager
+7. Executive presence — influence in the room at director level
+8. Navigating organisational politics
+9. Storytelling as a leadership tool — aligning teams through narrative
+10. Product leadership during a company downturn
 
-### Expert — current topics (flat format, needs structured sequences)
+Level arc: the threshold (1) → the core job (2) → the environment (3) → the individuals (4) → adding people (5) → the culture they join (6) → the upward and outward turn (7–9: presence, politics, narrative) → the exam (10, the level capstone). Level through-line: *intermediate made you the PM who moves decisions; advanced is the shift from doing to leading — people, culture, and the organisation around you.*
+
+**Changes made during sequence design (vs flat topic list):**
+- Reordered: "Moving from IC to manager" moved 10th → 1st — a prerequisite-arc failure in the flat list: mentoring, hiring, and managing a team all assume you've already crossed the threshold the list put last. It is the level's frame-setter, including whether to cross at all (the IC path as a path, not a consolation).
+- Elevated: "Product leadership during a company downturn" 9th → 10th as the level capstone — leading through layoffs, frozen budgets, and fear tests every skill in the level at once (safety, culture, storytelling, presence, managing the team).
+- Reframed: "Executive communication — what changes at director level" → "Executive presence — influence in the room at director level" — Product Communication advanced's proposed topic 1 is "Communication at director level"; a head-on collision. PC owns the communication craft; L&I owns presence — composure as signal, conviction with calibration, gravitas without persona (flagged for Track 8 in the watch-list).
+- Reframed: "Strategic storytelling for product leaders" → "Storytelling as a leadership tool — aligning teams through narrative" — Product Strategy advanced owns the strategic argument (Rumelt) and Product Communication owns narrative craft; what L&I owns is story as a leadership instrument: meaning, repetition, and the counter-story test.
+- "Navigating organisational politics" kept with a carve: this is the leader's personal political craft (power maps, agendas, integrity); SM intermediate's "Navigating political environments" must take the stakeholder-alignment lens or be cut when Track 6 is sequenced (flagged in the watch-list).
+- "Creating psychological safety" credits Amy Edmondson; the blameless post-mortem machinery stays in E&D — this is the leader's everyday behaviour. "Building a product culture" honours the 2026-06-12 carve: E&D expert owns the culture of *shipping*; this owns broad product culture; company-wide transformation is expert.
+- Spaced-repetition threads: the feedback skills from intermediate return as developmental feedback (topic 4) and performance honesty (topic 2); sponsorship (topic 4 lesson 7) pays off the intermediate career capstone; the three culture levers (topic 6) seed the expert culture topics; storytelling-in-hard-moments (topic 9 lesson 5) is rehearsal for the downturn capstone.
+
+### Expert — ✅ Complete (2026-06-12)
+
+10 topics × 8 lessons = 80 lessons. In `lesson_config.py`.
 
 1. CPO and VP Product responsibilities compared
-2. Board-level product communication
-3. Product considerations in M&A
-4. Building a product org from scratch
+2. Building a product org from scratch
+3. Leading leaders — managing directors and heads of product
+4. Leading the product org through hypergrowth and scale transitions
 5. Building strategic capability in your product org — making strategy everyone's job
-6. Investor relations for product leaders ⚠️ *Also proposed in Stakeholder Management Expert (topic 3) — decide which track owns it when either is reviewed*
-7. Creating a product-led growth culture
+6. Making the company product-led — culture change beyond the product org
+7. Product considerations in M&A — the product leader's role
 8. Succession planning in product leadership
 9. Leading with a 10-year vision — keeping the organisation aligned and believing
 10. Operating as the senior-most product person
 
-**Cross-track duplicates resolved 2026-06-10** (after Product Strategy Expert was sequenced):
-- Topic 5 renamed: was "Product strategy at company scale" — duplicated Product Strategy Expert topic 1 ("When product strategy is company strategy"). Reframed to the leadership lens: PS covers *what the strategy is* at company level; this covers building the org's strategic capability — developing strategic thinkers, delegating strategy, making it everyone's job.
-- Topic 9 renamed: was "10-year product vision setting" — duplicated Product Strategy Expert topic 11 ("The 10-year vision — what it is, what it isn't, and how to set one"). Reframed to the leadership lens: PS covers *setting* the vision; this covers *leading with it* — sustaining belief through setbacks, keeping a growing organisation aligned, evangelising it over years.
-- Note: topic 2 ("Board-level product communication") is deliberately **not** a duplicate of Product Strategy Expert topic 10 — that topic's `through_line` already carves the boundary: PS covers what boards are actually asking about strategy (the fiduciary lens); this covers board communication craft and the relationship more broadly.
+Level arc: what the job is (1) → build the org (2) → lead its leaders (3) → carry it through scale (4) → raise its capability (5) → change the company around it (6) → the hard external event (7: M&A) → secure its future (8: succession) → sustain belief over years (9: vision) → the chair itself (10). Level through-line: *you lead the product organisation itself — peer-to-peer with CPOs and VPs about orgs, succession, culture change, and the chair where the buck stops.*
+
+Topic 10 is the capstone of the entire track — from a beginner with no authority to the chair where the buck stops, only to discover authority still isn't enough. Treat it as special.
+
+**Changes made during sequence design (vs flat topic list):**
+- Cut: "Investor relations for product leaders" — **resolves the ⚠️ watch-list flag: Stakeholder Management Expert owns investor relations.** SM expert's entire through-line is boards, investors, and the most senior stakeholders as *relationships*; a second investor topic here would duplicate, not deepen.
+- Cut: "Board-level product communication" — boards are already four-way carved (Product Strategy expert owns the strategy conversation, D&R expert customer evidence, M&A expert the numbers, Product Communication presentation craft), and SM expert owns the board *relationship* ("Managing your board of directors", "Managing activist or difficult board members"). A fifth board topic was curriculum bloat, not coverage.
+- New topic in a freed slot: **"Leading leaders — managing directors and heads of product"** — advanced owns managing PMs; nothing anywhere covered managing *managers*: judging through the layer, autonomy contracts, skip-levels, and the director who struggles. The genuine gap between managing a team and succession planning.
+- New topic in the other freed slot: **"Leading the product org through hypergrowth and scale transitions"** — culture dilution, the layer you must add, the displaced early guard, and your own transformation as the org doubles. Carved against E&D expert: that track owns delivery-at-scale and org-structure mechanics; this owns the people and leadership side of scale.
+- Reframed: "Creating a product-led growth culture" → "Making the company product-led — culture change beyond the product org" — Go-to-Market owns the PLG motion mechanics; the CPO-level leadership content is cross-functional culture change in functions that don't report to you.
+- "Product considerations in M&A" sharpened to "…— the product leader's role", honouring the carve recorded in Product Strategy expert (PS owns the acquisition thesis; Technical Skills owns technical due diligence; SM takes the stakeholder-comms lens at Track 6): this is product due diligence, the integration decision, and the acquired team's first year.
+- The 2026-06-10 reframes of topics 5 and 9 (strategic capability, leading with the vision) held as recorded — `through_line`s now encode both carves against Product Strategy expert.
+- Reordered into the arc above: org building (2) directly after the frame-setter; M&A and succession swapped so the level ends on the long game (succession → vision → the chair).
+- Spaced-repetition threads: the first-team idea (topic 1 lesson 5 → topic 3 lesson 7); delegation from advanced returns as autonomy contracts (topic 3) and giving away your own job (topic 8 lesson 4); the culture levers from advanced return at founding scale (topic 2 lesson 6), scale transitions (topic 4 lesson 2), and M&A integration (topic 7 lesson 6); storytelling from advanced returns as communicating through layers (topic 4 lesson 5) and sustaining vision belief (topic 9); the leader's-shadow idea closes the track (topic 10 lesson 2).
 
 ---
 
@@ -809,7 +1079,7 @@ Through-line: *you can get things done, build trust, and start to influence the 
 2. Managing conflicting priorities between execs
 3. Building a stakeholder engagement plan
 4. Using data to win alignment
-5. Navigating political environments
+5. Navigating political environments ⚠️ *L&I advanced now owns the leader's personal political craft (power maps, agendas, integrity — sequenced 2026-06-12); take the stakeholder-alignment lens here or cut*
 6. Communicating delays and bad news well
 7. Running product steering committees
 8. Cross-org dependency management
@@ -825,7 +1095,7 @@ Through-line: *you manage upward, sideways, and across organisational boundaries
 3. Building coalitions for unpopular decisions
 4. Stakeholder management in a matrix organisation
 5. Managing stakeholders through major change or restructure
-6. The executive sponsor relationship — how to make it work
+6. The executive sponsor relationship — how to make it work ⚠️ *L&I intermediate now owns the personal sponsor-relationship craft ("Managing up to your exec sponsors", sequenced 2026-06-12); take the governance/engagement-machinery lens here or fold into another topic*
 7. When stakeholders are wrong — making the case with data and narrative
 8. Global stakeholder management across geographies and cultures
 9. Managing external stakeholders — customers, partners, analysts
@@ -837,7 +1107,7 @@ Through-line: *you manage boards, investors, and the most senior stakeholders in
 
 1. Managing your board of directors as a product leader
 2. The CEO relationship — how to make it work and what breaks it
-3. Investor relations for product leaders ⚠️ *Also in Leadership & Influence Expert (topic 6) — decide which track owns it when either is reviewed*
+3. Investor relations for product leaders ✅ *Resolved 2026-06-12: SM owns it — L&I expert cut its investor-relations topic (and its board-communication topic) when sequenced; SM expert owns the board/investor/CEO relationships outright*
 4. Building exec alignment on a multi-year product vision
 5. Stakeholder management across an acquisition or merger
 6. Managing activist or difficult board members

@@ -422,6 +422,21 @@ pnpm db:reset     # Reset database
 
 **Test counts** (after 12.1): API 206 unit + 32 integration; Web 54 unit + Playwright E2E; Mobile 149 unit + Detox E2E
 
+## Lesson Generation Scripts — Planned Robustification (2026-06-13)
+
+Ticket 005 spec written (`docs/reqs/005-robustify-lesson-generation.md`). Arch review required before implementation. Not yet built.
+
+**New architecture (skeleton-first)**:
+- `--init` builds `prisma/lesson-skeleton.json` from `lesson_config.py` — every lesson slot with permanent `lessonNumber` assigned before any API call. Never recomputed.
+- `--generate` fills pending/failed slots only. Failures hold their slot.
+- `--export` writes `generated-lessons.json` explicitly — refused if any gaps remain. Takes a timestamped backup first.
+- `--one --track ... --level ... --topic ... --lesson-index N` repairs a single slot, no renumbering.
+- `--migrate` converts existing `generated-lessons.json` to skeleton format, preserving all `lessonNumber` values exactly as-is.
+
+**`generated-lessons.json` is sacred** — irreplaceable (hundreds of person-hours, millions of tokens). Only `--export` may write to it, with full backup protection. No other command touches it.
+
+**Generation and seeding are completely independent.** One generation run ≠ one seed run. `seed.ts` has no knowledge of the generation pipeline — it just reads `generated-lessons.json`.
+
 ## Lesson Generation Scripts (added 2026-06-09)
 
 Content generation is offline batch, not realtime. Scripts live in `learning/scripts/`.
