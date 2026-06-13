@@ -1,7 +1,7 @@
 ---
 name: Arch Context — Learning App
 description: Architectural knowledge and decision log for the Learning App MVP
-last_updated: 2026-04-12
+last_updated: 2026-06-13
 ---
 
 # Learning App — Architectural Context
@@ -183,6 +183,29 @@ last_updated: 2026-04-12
 
 ---
 
+## Offline Lesson Generation Pipeline
+
+**Location**: `learning/scripts/` (the `learning` repo — **not** `learning-ai`). Key files: `generate-lessons.py` (~848 lines, the CLI), `lesson_config.py` (curriculum definition — tracks, levels, topics, lessons), `generate-lessons-local.py` (local-model variant).
+
+**Nature**: This is **offline operator tooling**, not part of the runtime request path. It generates the lesson corpus ahead of time via paid AI calls (Claude API, batch and sync modes). The runtime app never invokes it. It is decoupled from the `learning-ai` FastAPI service (which handles *runtime* AI: today's-lesson personalization, coaching). Generation is a build-time concern; `learning-ai` is a serve-time concern.
+
+**The handoff artefact**: `prisma/generated-lessons.json` (~5.6 MB, ~56k lines). This is the single, clean output of generation and the **only** input the seed reads. The seed (`prisma/seed.ts`) knows nothing about how it was produced. This file is **sacred** — irreplaceable (hundreds of person-hours + millions of tokens). Protection rules are enforced in code: only `--export` writes it (with backup + atomic rename), only `--migrate` reads it (read-only).
+
+**Architectural principle (ticket 005, approved 2026-06-13)**: *Declare the full curriculum upfront, then fill the slots.* The pipeline builds a complete skeleton (`prisma/lesson-skeleton.json`) from `lesson_config.py` before any API call. Every lesson slot exists from the start with its `lessonNumber` assigned **once** (sorted `(topicId asc, lessonIndex asc)` per path) and **never recomputed**. A generation failure holds its slot as `status: "failed"` rather than disappearing and letting numbers close over the gap — the root-cause failure mode from ticket 004 (silent dropped lesson, renumbering).
+
+**Skeleton ↔ export ↔ seed separation**:
+- `lesson-skeleton.json` — working file, committed to git. Holds every slot + per-slot `status` (`pending`/`complete`/`failed`) + `error`. All generation activity mutates this incrementally (it is the checkpoint; the old `generate-checkpoint.json` / `batch-checkpoint.json` are retired).
+- `generated-lessons.json` — written only by explicit `--export`, only when *all* slots are `complete`. Contains no status/skeleton metadata. Format unchanged — seed needs no changes.
+- `seed.ts` — reads `generated-lessons.json` only. Generation and seeding are fully independent processes; one run ≠ one seed.
+
+**Slot identity**: `track|level|topicName|lessonIndex` is the stable key joining batch results (`custom_id_map`) and `--one` targeting to skeleton slots. **Known constraint**: renaming a track/topic in `lesson_config.py` while a batch is in flight orphans results.
+
+**Commands**: `--init` (build skeleton), `--migrate` (one-off: convert existing `generated-lessons.json` → skeleton, preserving `lessonNumber` exactly), `--generate` (default; fills pending/failed slots), `--export` (gate before seed; all-or-nothing), `--one` (repair a single slot), `--status` / `--validate` (observability).
+
+**`isPremium`**: carried as a slot field but irrelevant during generation/sequencing — set later via the admin interface. Do not flag config/skeleton `isPremium` mismatches.
+
+---
+
 ## Module Interactions
 
 ### Authentication Flow
@@ -305,6 +328,12 @@ last_updated: 2026-04-12
 ---
 
 ## Change Log
+
+**2026-06-13** — Arch review: 005-robustify-lesson-generation (required - approved)
+- Approved skeleton-first generation architecture; no ADR (refinement of existing pipeline, no new integration)
+- Added standing "Offline Lesson Generation Pipeline" section to context — was previously undocumented architectural area
+- Key structural knowledge captured: pipeline lives in `learning/scripts/` (not `learning-ai`); it is build-time tooling decoupled from the runtime `learning-ai` FastAPI service; `generated-lessons.json` is the sacred handoff artefact; skeleton-first principle (declare curriculum upfront, `lessonNumber` assigned once, failures hold their slot)
+- Constraints set for dev agent in req doc: `--migrate` orphan handling, config-rename-during-batch warning, `schema_version` check, `os.rename()` atomicity
 
 **2026-06-12** — Arch review: 003-fix-lesson-ids (not-required)
 - Mechanical rename `Lesson.day` → `Lesson.lessonNumber` — no structural change, no ADR needed

@@ -217,7 +217,15 @@
       "Bash(awk 'NR>=29888 && NR<=30870 && \\(/\"title\":/ || /\"lessonNumber\":/ || /\"track\":/ || /\"level\":/\\) {print NR\": \"$0}' prisma/generated-lessons.json)",
       "Bash(awk 'NR>=29888 && NR<=30870 && \\(/\"title\":/ || /\"lessonNumber\":/ || /\"track\":/ || /\"level\":/\\) {print NR\": \"$0}' /Users/guypowell/Documents/Projects/learning/prisma/generated-lessons.json)",
       "Bash(awk 'NR>=29800 && NR<=30890 && /\"lessonNumber\":/ {gsub\\(/[^0-9]/,\"\"\\); printf \"%s \", $0}' prisma/generated-lessons.json)",
-      "Bash(awk 'NR>=29200 && NR<=30888 && /\"lessonNumber\":/ {gsub\\(/[^0-9]/,\"\"\\); print}' prisma/generated-lessons.json)"
+      "Bash(awk 'NR>=29200 && NR<=30888 && /\"lessonNumber\":/ {gsub\\(/[^0-9]/,\"\"\\); print}' prisma/generated-lessons.json)",
+      "Bash(python3 scripts/generate-lessons.py --init)",
+      "Bash(python3 -m py_compile scripts/generate-lessons.py)",
+      "Bash(python3 scripts/generate-lessons.py --migrate)",
+      "Bash(python3 -c \"import ast; ast.parse\\(open\\('scripts/generate-lessons.py'\\).read\\(\\)\\); print\\('Syntax OK'\\)\")",
+      "Bash(python3 scripts/generate-lessons.py --one)",
+      "Bash(ANTHROPIC_API_KEY=test python3 scripts/generate-lessons.py --one --track \"Nonexistent Track\" --level \"beginner\" --topic \"Bad Topic\" --lesson-index 1)",
+      "Bash(python3 scripts/generate-lessons.py --status)",
+      "Bash(python3 scripts/generate-lessons.py --validate)"
     ],
     "additionalDirectories": [
       "/Users/guypowell/Documents/Projects/learning/prisma",

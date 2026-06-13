@@ -32,10 +32,10 @@ Work the tracks in this order. Never skip ahead; never start a track until the p
 | # | Track | Sequencing status | Generated |
 |---|---|---|---|
 | 1 | Product Strategy | ✅ All 4 levels in `lesson_config.py` (2026-06-10) | ✅ All 4 levels (336 lessons) |
-| 2 | Discovery & Research | ✅ All 4 levels in `lesson_config.py` (2026-06-12) | ⚪ No |
-| 3 | Execution & Delivery | ✅ All 4 levels in `lesson_config.py` (2026-06-12) | ⚪ No |
-| 4 | Metrics & Analytics | ✅ All 4 levels in `lesson_config.py` (2026-06-12) | ⚪ No |
-| 5 | Leadership & Influence | ✅ All 4 levels in `lesson_config.py` (2026-06-12) | ⚪ No |
+| 2 | Discovery & Research | ✅ All 4 levels in `lesson_config.py` (2026-06-12) | ✅ All 4 levels (320 lessons) |
+| 3 | Execution & Delivery | ✅ All 4 levels in `lesson_config.py` (2026-06-12) | ✅ All 4 levels (320 lessons) |
+| 4 | Metrics & Analytics | ✅ All 4 levels in `lesson_config.py` (2026-06-12) | ✅ All 4 levels (320 lessons) |
+| 5 | Leadership & Influence | ✅ All 4 levels in `lesson_config.py` (2026-06-12) | ✅ All 4 levels (320 lessons) |
 | 6 | Stakeholder Management | ⚪ Not started — flat topics; Advanced AND Expert missing | ⚪ No |
 | 7 | Go-to-Market & Launch | ⚪ Not started — flat topics; Beginner AND Expert missing | ⚪ No |
 | 8 | Product Communication | ⚪ Not started — flat topics; Advanced AND Expert missing | ⚪ No |
@@ -56,7 +56,7 @@ For tracks 10 and 11: create the full track entry in `TRACKS` — `trackId` 10/1
 
 ## Session workflow — one track per session
 
-**Checkpoint cadence (agreed 2026-06-12): level-by-level.** Propose a complete level in one message — the refined topic list plus all 8-lesson sequences for every topic. The user reviews and edits, you incorporate, **then** write that level to `lesson_config.py` in a single edit, then move to the next level. Do not write to `lesson_config.py` before the level is agreed. Do not drop back to per-topic checkpoints unless the user asks.
+**Checkpoint cadence (updated 2026-06-13): all 4 levels in one pass.** Propose all four levels in a single message — the refined topic list plus all 8-lesson sequences for every topic across beginner → expert. The user reviews and edits, you incorporate, **then** write all levels to `lesson_config.py` in a single edit. Do not write to `lesson_config.py` before the full track is agreed. Do not drop back to per-level or per-topic checkpoints unless the user asks.
 
 ### Steps
 
