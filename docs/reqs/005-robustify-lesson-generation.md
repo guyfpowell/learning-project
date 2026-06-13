@@ -773,3 +773,24 @@ Both writes use `open(BATCH_LOG_PATH, "a")` — append mode, no locking needed (
 - ✅ `batch-log.jsonl` is committed to git (not gitignored)
 - ✅ The 3 backfilled historical batch IDs are present in the file
 - ✅ A failed batch still produces a `submitted` line (written before polling begins)
+
+---
+
+## Known Issue — `--init` orphans stale slots instead of replacing them (found 2026-06-13)
+
+**Symptom:** After renaming/restructuring topics in `lesson_config.py` (flat → structured) and re-running `--init`, every subsequent `--batch` printed `⚠️ Cannot find topic config for <track>/<level>/topic_N — skipping` for every lesson, and `--status` showed `topic_1`…`topic_N` placeholder slots stuck as `pending`.
+
+**Root cause:** `cmd_init()` on an existing skeleton only *appends* slots whose `_slot_key` is new — it never removes slots that no longer correspond to anything in `lesson_config.py`. When topic names changed (old `topic_N` placeholders → real structured names), `--init` added the new real-named slots **alongside** the stale `topic_N` ones rather than replacing them. Two further consequences:
+- The stale placeholders remained `pending`, so `--export` (which gates on the *entire* skeleton being gap-free) could never run.
+- Newly-added slots are stamped `lessonNumber = -1` (sentinel), so even the good slots failed `--validate` contiguity until renumbered.
+
+`build_batch_requests_from_skeleton()` then skipped the stale slots (their `topicName` isn't in config) — correct defensively, but the skeleton was left in a permanently un-exportable state.
+
+**Manual workaround used (2026-06-13):** one-off script — removed every slot whose `topicName` matched `^topic_\d+$`, re-sorted each path by `(topicId, lessonIndex)`, reassigned `lessonNumber` 1..N. Backed up skeleton first. `--validate` passed afterwards (34 paths, 2592 lessons). This was surgical and is **not** a general fix.
+
+**Proposed fix (for a future chunk):**
+1. `--init` should *reconcile*, not just append: detect slots in the skeleton that no longer match any `lesson_config.py` entry and either (a) remove them when `status != complete`, or (b) report them as orphans and require an explicit `--prune` flag to delete. Never silently leave un-exportable placeholders.
+2. After adding/removing slots, `--init` must renumber affected paths (assign real `lessonNumber`s, not the `-1` sentinel) so the skeleton is always export-valid, or clearly direct the operator to run a renumber/validate step.
+3. Consider a `--reconcile`/`--prune` subcommand that diffs skeleton vs config and shows adds/removes/renames before writing.
+
+**Constraint reminder:** any such reconcile must still honour the architecture rule that `lessonNumber` for an existing, already-generated slot is never recomputed. Only newly-added or removed slots may shift numbering, and only for affected paths.

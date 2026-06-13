@@ -14,7 +14,9 @@ Generates all Ascent micro-lessons and loads them into the database.
 | Execution & Delivery | all 4 levels | 320 | 🟡 Sequenced in `lesson_config.py` (2026-06-12), not generated |
 | Metrics & Analytics | all 4 levels | 320 | 🟡 Sequenced in `lesson_config.py` (2026-06-12), not generated |
 | Leadership & Influence | all 4 levels | 320 | 🟡 Sequenced in `lesson_config.py` (2026-06-12), not generated |
-| All other tracks (5 tracks) | various | — | ⚪ Not sequenced or generated — see `docs/product-consultant.md` for order and progress |
+| Stakeholder Management | all 4 levels | 320 | 🟡 Sequenced in `lesson_config.py` (2026-06-13), not generated |
+| Go-to-Market & Launch | all 4 levels | 320 | 🟡 Sequenced in `lesson_config.py` (2026-06-13), not generated |
+| All other tracks (3 tracks) | various | — | ⚪ Not sequenced or generated — see `docs/product-consultant.md` for order and progress |
 
 **Database:** Not yet seeded. Run `pnpm --filter api prisma:seed` to load the beginner lessons. **This may be out of date**
 
@@ -365,8 +367,8 @@ When starting a new track:
 | 3 | Execution & Delivery | ✅ All four levels sequenced (2026-06-12) — ready to generate |
 | 4 | Metrics & Analytics | ✅ All four levels sequenced (2026-06-12) — ready to generate |
 | 5 | Leadership & Influence | ✅ All four levels sequenced (2026-06-12) — ready to generate |
-| 6 | Stakeholder Management | ⚪ Not started |
-| 7 | Go-to-Market & Launch | ⚪ Not started |
+| 6 | Stakeholder Management | ✅ All four levels sequenced (2026-06-13) — ready to generate |
+| 7 | Go-to-Market & Launch | ✅ All four levels sequenced (2026-06-13) — ready to generate |
 | 8 | Product Communication | ⚪ Not started |
 | 9 | AI for Product Managers | ✅ All four levels sequenced — ready to generate |
 | 10 | Product Design & UX for PMs | ⚪ Not started — new track |
@@ -1045,151 +1047,197 @@ Topic 10 is the capstone of the entire track — from a beginner with no authori
 
 ## Track 6: Stakeholder Management
 
-**Status:** ⚪ Not started — advanced and expert levels missing, existing levels in flat format
+**Status:** ✅ All four levels sequenced and in `lesson_config.py` (2026-06-13) — 40 topics, 320 lessons. Not yet generated.
 
 **Category:** `product-management`
 
 **Description:** Align, communicate, and build trust across the org.
 
+*Sequenced in a single pass (all four levels, user-directed, full proposal reviewed before writing) on 2026-06-13.*
+
+**The track's defining carve (decided 2026-06-12, applied here): SM vs L&I.** SM owns the stakeholder *system* and the *governance relationships* — identifying and mapping stakeholders, engagement plans, cadences, review meetings, steering committees, coalitions, dependencies, and the relationships with external governance (board, investors, CEO). L&I owns the *personal craft* — persuasion, negotiation, trust, feedback, leading teams, growing people, culture, org building, and the career path. The track's spine: beginner manages immediate stakeholders one relationship at a time → intermediate runs a stakeholder *system* across a complex org → advanced manages upward, sideways, and across boundaries under pressure → expert manages the governance layer and, finally, the institution itself.
+
 ### Level structure
 
 | Level | Who it's for | Status |
 |---|---|---|
-| Beginner | PMs learning to manage their first stakeholders | ⚪ Topics exist, needs structured sequences |
-| Intermediate | PMs navigating complex stakeholder environments | ⚪ Topics exist, needs structured sequences |
-| Advanced | Senior PMs managing executives, conflict, and political environments | ⚪ Missing — needs topics and sequences |
-| Expert | VPs and CPOs managing boards, investors, and org-wide alignment | ⚪ Missing — needs topics and sequences |
+| Beginner | PMs learning to manage their first stakeholders | ✅ Sequences written — in `lesson_config.py` (2026-06-13) |
+| Intermediate | PMs navigating complex stakeholder environments | ✅ Sequences written — in `lesson_config.py` (2026-06-13) |
+| Advanced | Senior PMs managing executives, conflict, and political environments | ✅ Sequences written — in `lesson_config.py` (2026-06-13) |
+| Expert | VPs and CPOs managing boards, investors, and org-wide alignment | ✅ Sequences written — in `lesson_config.py` (2026-06-13) |
 
-### Beginner — current topics (flat format, needs structured sequences)
+### Beginner — ✅ Complete (2026-06-13)
 
-1. Who are your stakeholders and why it matters
-2. Stakeholder communication cadences
-3. Writing clear product update emails
-4. Running a product review meeting
-5. Saying no without burning bridges
-6. Managing sales and product tension
-7. Working effectively with customer success
-8. Aligning with marketing on roadmap
-9. Keeping design partners engaged
-10. Documentation your stakeholders will actually read
+10 topics × 8 lessons = 80 lessons. In `lesson_config.py`. Level through-line: *you can identify, communicate with, and build trust with the stakeholders around your product, one relationship at a time.*
 
-### Intermediate — current topics (flat format, needs structured sequences)
+1. Who your stakeholders are and why managing them is your job
+2. What different stakeholders actually want from you
+3. Setting up your stakeholder communication cadence
+4. Writing a product update people actually read
+5. Running a stakeholder review meeting
+6. Saying no without burning bridges
+7. Managing the sales–product relationship
+8. Building a working partnership with customer success
+9. Aligning with marketing on the roadmap
+10. Keeping design partners and early customers engaged
 
-1. RACI models for product teams
-2. Managing conflicting priorities between execs
-3. Building a stakeholder engagement plan
+Level arc: identify (topic 1) → understand what each wants (topic 2) → communicate (cadence, update, review — topics 3–5) → the hard moment (the no — topic 6) → the specific relationships (sales, CS, marketing, design partners — topics 7–10).
+
+**Changes made during sequence design (vs proposed topic list):**
+- Added a new topic 2, "What different stakeholders actually want from you" — a prerequisite for the cadence and update topics; you can't tailor communication until you've read what each stakeholder needs (information, involvement, reassurance, outcomes).
+- Cut "Documentation your stakeholders will actually read" — writing/documentation craft is owned by Product Communication; the genuine SM idea inside it (a pull-based source of truth) folds into the cadence topic (lesson 6) and the update topic.
+- Renamed "Managing sales and product tension" → "Managing the sales–product relationship", "Working effectively with customer success" → "Building a working partnership with customer success", "Aligning with marketing on roadmap" → "Aligning with marketing on the roadmap", "Keeping design partners engaged" → "Keeping design partners and early customers engaged" — relationship framing, not tension/task framing.
+- Reframed "Running a product review meeting" → "Running a stakeholder review meeting" — carved as the *routine* stakeholder ritual; high-stakes decision facilitation belongs to L&I advanced, steering committees to SM intermediate (recorded in the through_line).
+- "Saying no" keeps the stakeholder-facing no (E&D beginner defers the craft of the no here); L&I beginner owns the personal disagreement/pushback craft.
+- `through_line` on all 10 topics. Boundary decisions: topic 1 credits Mendelow's power/interest grid and defers org-wide systems to intermediate; topic 4 owns the stakeholder update and defers Minto/writing craft to Product Communication; topic 9 owns the ongoing marketing relationship and defers launch/GTM collaboration to Go-to-Market.
+- Spaced-repetition threads: no-surprises (topic 3 lesson 5 → topic 4 lesson 5 → intermediate bad-news topic); tailoring by stakeholder (topic 2 → topic 4 altitude → topic 6 audience); the pull-based source of truth (topic 3 lesson 6 → topic 4).
+
+### Intermediate — ✅ Complete (2026-06-13)
+
+10 topics × 8 lessons = 80 lessons. In `lesson_config.py`. Level through-line: *you run a stakeholder system across a complex organisation — engagement plans, governance forums, dependencies, and bad news handled well.*
+
+1. Building a stakeholder engagement plan
+2. RACI and decision rights for product teams
+3. Managing conflicting priorities between executives
 4. Using data to win alignment
-5. Navigating political environments ⚠️ *L&I advanced now owns the leader's personal political craft (power maps, agendas, integrity — sequenced 2026-06-12); take the stakeholder-alignment lens here or cut*
-6. Communicating delays and bad news well
+5. Communicating delays and bad news well
+6. Navigating political environments
 7. Running product steering committees
 8. Cross-org dependency management
 9. Managing external stakeholders and partners
 10. Stakeholder retrospectives
 
-### Advanced — missing, proposed topics
+Level arc: build the system (engagement plan — topic 1) → clarify rights within it (RACI — topic 2) → the hard situations (exec conflict, evidence, bad news, politics — topics 3–6) → the machinery (steering committees, dependencies, external partners — topics 7–9) → close the loop and improve (retro — topic 10).
 
-Through-line: *you manage upward, sideways, and across organisational boundaries with confidence.*
+**Changes made during sequence design (vs proposed topic list):**
+- All 10 topics kept. Reordered so "Building a stakeholder engagement plan" opens the level (it scales beginner's per-relationship work into a system, and is the level's core artefact) and "Stakeholder retrospectives" closes it (reflective improvement of the system).
+- **⚠️ flag resolved — "Using data to win alignment":** took the persuasion/alignment lens — data as the neutral arbiter that aligns disagreeing stakeholders. Metric craft, dashboards, and statistical rigour stay with Metrics & Analytics; argument architecture stays with L&I. Recorded in the through_line.
+- **⚠️ flag resolved — "Navigating political environments":** took the stakeholder-alignment lens — reading the org's real power and interests to get product work through. L&I advanced owns the leader's personal political craft (power maps, agendas, integrity). Recorded in the through_line.
+- Renamed "RACI models for product teams" → "RACI and decision rights for product teams" (the concept is decision rights; RACI is one tool, DACI offered as the lighter alternative) and "Managing conflicting priorities between execs" → "Managing conflicting priorities between executives".
+- `through_line` on all 10 topics. Steering committees (topic 7) carved as the formal governance forum — routine review is beginner, board governance is expert. Cross-org dependencies (topic 8) own the *people* behind dependencies; delivery mechanics stay with Execution & Delivery. External partners (topic 9) own the intermediate partner relationship; investor/analyst/board relations are expert.
+- Spaced-repetition threads: decision rights (topic 2 → topic 7 mandate → topic 8 escalation); the engagement plan (topic 1 → topic 10 updates the plan); bad-news/no-surprises (beginner cadence → topic 5 → advanced crisis).
+
+### Advanced — ✅ Complete (2026-06-13)
+
+10 topics × 8 lessons = 80 lessons. In `lesson_config.py`. Level through-line: *you manage upward, sideways, and across organisational boundaries with confidence.*
 
 1. Stakeholder management at scale — many stakeholders, many agendas
-2. Managing the hostile stakeholder — when alignment keeps failing
-3. Building coalitions for unpopular decisions
-4. Stakeholder management in a matrix organisation
-5. Managing stakeholders through major change or restructure
-6. The executive sponsor relationship — how to make it work ⚠️ *L&I intermediate now owns the personal sponsor-relationship craft ("Managing up to your exec sponsors", sequenced 2026-06-12); take the governance/engagement-machinery lens here or fold into another topic*
-7. When stakeholders are wrong — making the case with data and narrative
+2. Stakeholder management in a matrix organisation
+3. The executive sponsor relationship
+4. Building coalitions for unpopular decisions
+5. Managing the hostile stakeholder
+6. Standing your ground when a senior stakeholder is wrong
+7. Managing stakeholders through major change or restructure
 8. Global stakeholder management across geographies and cultures
-9. Managing external stakeholders — customers, partners, analysts
+9. Managing strategic external stakeholders at executive altitude
 10. Stakeholder management during a crisis or public incident
 
-### Expert — missing, proposed topics
+Level arc: the new scale (volume — topic 1) → the new structure (matrix — topic 2) → your power source (sponsor — topic 3) → building broad support (coalitions — topic 4) → when it fails (hostile — topic 5) → pushing back up (standing ground — topic 6) → upheaval (change — topic 7) → distance and culture (global — topic 8) → strategic external (topic 9) → the synthesis under pressure (crisis capstone — topic 10).
 
-Through-line: *you manage boards, investors, and the most senior stakeholders in the business.*
+**Changes made during sequence design (vs proposed topic list):**
+- **⚠️ flag resolved — "The executive sponsor relationship":** took the governance/engagement-machinery lens — the sponsor as a structural power source (air cover, escalation, unblocking, succession). L&I intermediate owns the personal craft of managing up to a sponsor. Recorded in the through_line.
+- Reframed proposed "When stakeholders are wrong — making the case with data and narrative" → **"Standing your ground when a senior stakeholder is wrong"** — escalates beyond intermediate's data-alignment topic to the *courage* dimension: the decision to push back upward and survive it. Avoids duplicating intermediate topic 4 and L&I's argument craft.
+- Reframed proposed "Managing external stakeholders — customers, partners, analysts" → **"Managing strategic external stakeholders at executive altitude"** — it duplicated intermediate topic 9 and GTM's analyst-relations topic; escalated to executive-to-executive partner relationships, marquee customers, and analysts *as relationships*. Analyst-influence mechanics defer to Go-to-Market, comms craft to Product Communication. Recorded in the through_line.
+- **⚠️ carve applied — "Stakeholder management during a crisis or public incident":** took the stakeholder-comms lens only (who you tell, when, how, under pressure); Execution & Delivery owns operational incident response. Made it the level capstone — it synthesises scale, triage, and trust-rebuilding.
+- Reordered for the arc above (scale → matrix → sponsor → coalitions → hostile → standing ground → change → global → external → crisis).
+- `through_line` on all 10 topics. Global topic (8) credits Erin Meyer's culture-map; international strategy/launch mechanics stay with other tracks.
+
+### Expert — ✅ Complete (2026-06-13)
+
+10 topics × 8 lessons = 80 lessons. In `lesson_config.py`. Level through-line: *you manage boards, investors, and the most senior stakeholders in the business.*
 
 1. Managing your board of directors as a product leader
 2. The CEO relationship — how to make it work and what breaks it
-3. Investor relations for product leaders ✅ *Resolved 2026-06-12: SM owns it — L&I expert cut its investor-relations topic (and its board-communication topic) when sequenced; SM expert owns the board/investor/CEO relationships outright*
-4. Building exec alignment on a multi-year product vision
-5. Stakeholder management across an acquisition or merger
-6. Managing activist or difficult board members
-7. Communicating product strategy across a global executive team
-8. When the organisation is your hardest stakeholder
-9. Legacy stakeholders — managing people who predate you
-10. Stakeholder management when things go publicly wrong
+3. Investor relations for product leaders
+4. Managing activist or difficult board members
+5. Building exec alignment on a multi-year product direction
+6. Legacy stakeholders — managing the powerful people who predate you
+7. Stakeholder management across an acquisition or merger
+8. Stakeholder management when the company is publicly in trouble
+9. Designing the stakeholder operating system for the product organisation
+10. When the organisation itself is your hardest stakeholder
+
+Level arc: the governance altitude (board — topic 1) → the single most consequential relationship (CEO — topic 2) → the return-thesis stakeholder (investors — topic 3) → the hard individuals at governance altitude (difficult directors — topic 4) → cross-exec alignment (topic 5) → inherited power (legacy — topic 6) → the exploded map (M&A — topic 7) → governance-layer crisis (topic 8) → building the system the whole org uses (topic 9) → the whole-track capstone: the institution itself (topic 10).
+
+**Changes made during sequence design (vs proposed topic list):**
+- **Investor relations confirmed SM-owned** (resolved 2026-06-12 — L&I expert cut its investor-relations *and* board-communication topics). Kept as topic 3 with the *relationship* lens; the fiduciary strategy lens stays with Product Strategy expert.
+- Reframed proposed "Building exec alignment on a multi-year product vision" → **"…product direction"** with the cross-exec alignment-machinery lens — Product Strategy expert owns what the direction *is*; L&I owns *leading the org* with it; this owns the alignment machinery across the exec stakeholder set.
+- **⚠️ carve applied — "Stakeholder management across an acquisition or merger":** took the stakeholder-comms lens only (M&A is now four-way carved: PS expert owns the thesis, L&I expert the operational role and acquired team, Technical Skills the technical due diligence, SM the stakeholder map an M&A explodes). Recorded in the through_line.
+- Cut proposed "Communicating product strategy across a global executive team" — it overlapped Product Communication and advanced's global topic. Replaced with **"Designing the stakeholder operating system for the product organisation"** — the distinctly-CPO meta-level (governance architecture, escalation paths, org-wide norms), which sets up the capstone.
+- Escalated proposed "Stakeholder management when things go publicly wrong" → **"…when the company is publicly in trouble"** — the company-scale, board-and-investor version (distinct from advanced's operational crisis topic); operational response stays with E&D, crisis comms craft with Product Communication.
+- **Whole-track capstone: "When the organisation itself is your hardest stakeholder"** — the senior-most realisation that structure, culture, and inertia become the stakeholder you must move; it ties together identification (beginner), the system (intermediate), upward-and-across (advanced), and the governance layer (expert).
+- `through_line` on all 10 topics. Board topic (1) carved against three neighbours: Product Strategy expert owns the strategy conversation, Metrics & Analytics expert owns the numbers, Product Communication owns presentation craft — SM owns the board as a *relationship and governance* set.
+- Spaced-repetition threads: the no-surprises rule (beginner cadence → expert board topic 1 "the surprise that never happens"); the difficult-individual thread (advanced hostile → expert difficult directors → legacy stakeholders); the crisis thread (advanced operational-comms crisis → expert company-scale crisis); the system thread (intermediate engagement plan/steering committees → expert operating-system topic 9).
 
 ---
 
 ## Track 7: Go-to-Market & Launch
 
-**Status:** ⚪ Not started — beginner and expert levels missing, existing levels in flat format
+**Status:** ✅ All four levels sequenced and in `lesson_config.py` (2026-06-13) — 40 topics, 320 lessons. Not yet generated.
 
 **Category:** `product-management`
 
 **Description:** Ship features that land, not just features that ship.
 
+**Track spine:** run a launch (beginner) → design a GTM strategy for a significant launch (intermediate) → lead complex, multi-market launches (advanced) → own GTM capability and launch strategy at the organisation level (expert). The whole-track capstone is the expert's final topic, "Building a launch-capable organisation".
+
 ### Level structure
 
 | Level | Who it's for | Status |
 |---|---|---|
-| Beginner | PMs running their first feature launches | ⚪ Missing — needs topics and sequences |
-| Intermediate | PMs owning GTM strategy for significant launches | ⚪ Topics exist, needs structured sequences |
-| Advanced | Senior PMs leading complex, multi-market launches | ⚪ Topics exist, needs structured sequences |
-| Expert | VPs and CPOs responsible for launch strategy and GTM capability | ⚪ Missing — needs topics and sequences |
+| Beginner | PMs running their first feature launches | ✅ Sequences written — in `lesson_config.py` |
+| Intermediate | PMs owning GTM strategy for significant launches | ✅ Sequences written — in `lesson_config.py` |
+| Advanced | Senior PMs leading complex, multi-market launches | ✅ Sequences written — in `lesson_config.py` |
+| Expert | VPs and CPOs responsible for launch strategy and GTM capability | ✅ Sequences written — in `lesson_config.py` |
 
-### Beginner — missing, proposed topics
+### Beginner — ✅ Complete (2026-06-13)
 
-Through-line: *you can plan and execute a feature launch confidently and learn from it.*
+Through-line: *you can plan and execute a feature launch confidently and learn from it.* New level — built from the proposed topic list.
 
-1. What go-to-market actually means for a PM
-2. The PM's role in a launch — and what's not yours
-3. Launch tiers — when to go big and when to go quiet
-4. Writing your first launch brief
-5. Working with marketing for a feature launch
-6. The soft launch — why you don't ship to everyone at once
-7. What to track in the first week after launch
-8. When a launch goes wrong — your immediate response
-9. Post-launch retrospectives — learning from what just happened
-10. Building launch confidence — the habits that make launches less scary
+10 topics: What go-to-market actually means for a PM · The PM's role in a launch — and what's not yours · Launch tiers — when to go big and when to go quiet · Writing your first launch brief · Working with marketing for a feature launch · Rolling out gradually — soft launches and staged releases · What to track in the first week after launch · When a launch goes wrong — your immediate response · Post-launch retrospectives · Turning launches into a routine — the habits that make each one easier *(level capstone topic)*.
 
-### Intermediate — current topics (flat format, needs structured sequences)
+**Changes made during sequence design (vs proposed topic list):**
+- Renamed topic 6 "The soft launch — why you don't ship to everyone at once" → "Rolling out gradually — soft launches and staged releases" to encompass phased rollout; `through_line` carves the GTM rollout *decision* (who/when/why) against E&D's flag/canary *mechanics*.
+- Renamed topic 10 "Building launch confidence…" → "Turning launches into a routine — the habits that make each one easier" — sharpened from a confidence/mindset topic to a repeatable-routine synthesis (the level capstone topic, pulling together brief, tiers, rollout, tracking, and retro).
+- `through_line` added to all 10 topics. Key boundary decisions: topic 1 carves the track (reaching/adopting users) against Discovery (build the right thing) and Product Strategy (direction); topic 2 keeps launch-time orchestration and defers ongoing relationships to Stakeholder Management; topic 5 *owns* launch collaboration with marketing (SM defers it here) and defers copy craft to Product Communication; topic 8 keeps the PM's launch-day triage and defers sev/on-call to E&D and crisis comms to SM; topic 9 is the launch retro specifically (not the sprint retro — E&D).
 
-1. Go-to-market strategy basics for PMs
-2. Launch tiers and how to decide which applies
-3. Writing a launch brief
-4. Beta programmes and early access design
-5. Product-led vs sales-led go-to-market
-6. Pricing and packaging for a new launch
-7. Defining launch success metrics
-8. Working with PR and comms
-9. Internal launch communications
-10. Post-launch retrospectives
+### Intermediate — ✅ Complete (2026-06-13)
 
-### Advanced — current topics (flat format, needs structured sequences)
+Through-line: *you own the GTM strategy behind a significant launch.* Converted from the flat topic list.
 
-1. Platform and ecosystem launch readiness
-2. Enterprise GTM complexity
-3. International launch planning
-4. Sequencing launches across markets
-5. Managing launch risk
-6. Competitive launch responses
-7. Analyst and influencer relations for PMs
-8. Category-defining launch narratives
-9. Measuring long-term launch impact
-10. Post-launch strategy evolution
+10 topics: Building a go-to-market strategy *(frame-setter)* · Choosing your go-to-market motion — product-led, sales-led, or hybrid · Positioning and messaging for a launch · Pricing and packaging for a new launch · Building the cross-functional launch plan · Beta programmes and early access design · Defining launch success metrics · Working with PR and comms · Internal launch communications and sales enablement · Driving adoption after the launch moment *(level capstone topic)*.
 
-### Expert — missing, proposed topics
+**Changes made during sequence design (vs flat topic list):**
+- **De-duplicated against beginner.** The flat list repeated three beginner topics — all three cut/elevated: "Launch tiers" cut (beginner craft) and replaced with **"Positioning and messaging for a launch"** (April Dunford positioning — genuine intermediate gap); "Writing a launch brief" elevated to **"Building the cross-functional launch plan"** (critical path across many teams, higher altitude than the beginner one-pager); "Post-launch retrospectives" cut and replaced with **"Driving adoption after the launch moment"** (the launch is the start of adoption, not the finish — the level capstone topic).
+- Reframed "Go-to-market strategy basics for PMs" → "Building a go-to-market strategy" (the level frame-setter — GTM strategy as coherent choices on a one-page canvas); "Product-led vs sales-led go-to-market" → "Choosing your go-to-market motion — product-led, sales-led, or hybrid" (owns PLG motion mechanics); "Internal launch communications" → "Internal launch communications and sales enablement".
+- Reordered for the prerequisite arc: strategy → motion → positioning → pricing → plan → beta → success metrics → PR → internal enablement → adoption.
+- `through_line` carves: topic 2 *owns* PLG motion mechanics (L&I owns the culture change — honours the watch-list flag); topic 3 carves launch positioning against PS value-prop and PC copy craft; topic 4 *owns* launch pricing/packaging mechanics (PS owns strategic pricing — honours the PS `through_line`); topic 7 chooses what launch success means and the horizon (Metrics owns the craft); topic 8 defers comms craft to PC and analyst relationships to SM; topic 10 defers lifecycle metric craft to Metrics and onboarding UX to Product Design.
 
-Through-line: *you own GTM capability and launch strategy at the organisation level.*
+### Advanced — ✅ Complete (2026-06-13)
 
-1. GTM strategy at company scale — when launches are business events
-2. Platform launches — coordinating an ecosystem
-3. Launching into a new market category — creating demand that doesn't exist yet
-4. Launch strategy under regulatory scrutiny
-5. Managing a recall or major rollback — the hardest launch conversation
-6. The global launch — coordinating across geographies at speed
-7. When to delay a launch — the executive call and how to make it
-8. Building a launch-capable organisation — processes, people, and culture
-9. Competitive launch responses at the market level
-10. Measuring the long-term business impact of launches
+Through-line: *you lead complex, multi-market launches in contested markets.* Converted from the flat topic list.
+
+10 topics: Managing launch risk *(senior frame-setter)* · Enterprise GTM complexity · Platform and ecosystem launch readiness · Launching across borders — localising the go-to-market · Coordinating a multi-market launch — simultaneous vs staggered · Competitive launch responses · Analyst and influencer relations for PMs · Category-defining launch narratives · Measuring the long-term impact of a launch · Evolving the go-to-market as the product matures *(level capstone topic)*.
+
+**Changes made during sequence design (vs flat topic list):**
+- All 10 flat topics kept, two renamed to carve sister topics apart: "International launch planning" → "Launching across borders — localising the go-to-market" (launch *execution/localisation*; PS owns market selection, sequencing, and operating model) and its companion "Sequencing launches across markets" → "Coordinating a multi-market launch — simultaneous vs staggered" (launch-coordination *logistics*; PS owns the market-sequencing *strategy*). "Measuring long-term launch impact" → "Measuring the long-term impact of a launch" (one launch's sustained impact — expert owns the portfolio view). "Post-launch strategy evolution" → "Evolving the go-to-market as the product matures" (the level capstone topic — the GTM lifecycle).
+- Reordered: "Managing launch risk" moved 5th → 1st as the senior frame-setter (at this level launches do real damage; risk management is the job); the capstone topic to 10th.
+- `through_line` carves: topic 6 "Competitive launch responses" is *your launch vs a specific competitor move* (expert owns market-level dynamics; PS owns competitive strategy); topic 7 *owns* the analyst-influence mechanics for launches (SM owns analysts as ongoing relationships — honours the SM↔GTM watch-list flag); topic 8 owns the launch *narrative craft and demand framing* (PS expert owns the strategic choice to create a category; PC owns presentation craft); topic 9 attributes sustained impact (Metrics owns attribution craft).
+
+### Expert — ✅ Complete (2026-06-13)
+
+Through-line: *you own GTM capability and launch strategy at the organisation level.* New level — built from the proposed topic list.
+
+10 topics: GTM as company strategy — when a launch is a business event *(frame-setter)* · The GTM operating model — running a portfolio of launches · Creating demand that doesn't exist yet — launching a new category · Competitive launch dynamics at the market level · Global go-to-market at company scale — the operating model for worldwide launches · Launch strategy under regulatory scrutiny · The executive call to delay — when not to launch · Managing a recall or major rollback — the hardest launch decision · Measuring the business value of launches — the ROI of GTM capability · Building a launch-capable organisation — institutionalising launch excellence *(whole-track capstone)*.
+
+**Changes made during sequence design (vs proposed topic list):**
+- **Made "Building a launch-capable organisation" the final topic (whole-track capstone)** per the format standard — it is the true culmination (beginner *runs* a launch → expert *builds the org that launches well repeatedly*). Was proposed 8th.
+- **Cut proposed "Platform launches — coordinating an ecosystem"** — it duplicated advanced topic 3 (platform launch readiness) and PS expert "Platform strategy at scale". Replaced with **"The GTM operating model — running a portfolio of launches"** (the system, not the single launch — the genuine expert-altitude gap).
+- Reframed proposed topics to carve altitude against the advanced level and Product Strategy: "GTM strategy at company scale…" → "GTM as company strategy — when a launch is a business event" (frame-setter; PS owns the capital-allocation lens); "The global launch — coordinating across geographies at speed" → "Global go-to-market at company scale — the operating model for worldwide launches" (org/operating-model lens; coordinating one multi-market launch is advanced); "Competitive launch responses at the market level" → "Competitive launch dynamics at the market level" (multi-year market game; tactical launch-vs-competitor is advanced); "Measuring the long-term business impact of launches" → "Measuring the business value of launches — the ROI of GTM capability" (the portfolio/company ROI view; one launch's impact is advanced); "When to delay a launch…" → "The executive call to delay — when not to launch" (the leader owns the call; advanced built the go/no-go criteria); "Managing a recall…" → "Managing a recall or major rollback — the hardest launch decision" (builds on the delay topic — the call you didn't make in time; operational incident → E&D, crisis comms → SM/PC).
+- Ordered: company-strategy frame → operating model → the strategic plays (demand creation, market-level competition, global operating model) → the hard executive calls (regulatory, delay, recall) → measuring value → building the institution (capstone).
+- `through_line` carves throughout: demand creation is the GTM *execution* (PS expert owns the category-creation strategy); regulatory is the GTM *under scrutiny* (PS owns regulatory strategy/moats, AI track owns AI compliance, PC/SM own crisis-comms craft); the capstone is launch *capability* as an institutional asset (L&I owns the company-wide product-led culture change — honours the L&I expert "Making the company product-led" watch-list flag).
+
+**No new cross-track flags raised** — all GTM-side watch-list carves (SM↔GTM marketing/analyst, PS↔GTM pricing/international/category, L&I↔GTM PLG culture, E&D↔GTM launch comms/incident, AI rollouts) were *honoured* here, not deferred.
 
 ---
 

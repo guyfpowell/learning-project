@@ -225,11 +225,13 @@
       "Bash(python3 scripts/generate-lessons.py --one)",
       "Bash(ANTHROPIC_API_KEY=test python3 scripts/generate-lessons.py --one --track \"Nonexistent Track\" --level \"beginner\" --topic \"Bad Topic\" --lesson-index 1)",
       "Bash(python3 scripts/generate-lessons.py --status)",
-      "Bash(python3 scripts/generate-lessons.py --validate)"
+      "Bash(python3 scripts/generate-lessons.py --validate)",
+      "Bash(cat >> *)"
     ],
     "additionalDirectories": [
       "/Users/guypowell/Documents/Projects/learning/prisma",
-      "/Users/guypowell/Documents/Projects/learning/packages/web/app/(admin)/admin/users/[id]"
+      "/Users/guypowell/Documents/Projects/learning/packages/web/app/(admin)/admin/users/[id]",
+      "/Users/guypowell/Documents/Projects/learning-project/docs/reqs"
     ]
   }
 }
